@@ -125,6 +125,41 @@ body{background:var(--bg);color:var(--ink);
 .day-row .ev .mt{font-size:calc(13px*var(--z));}
 .day-row .pkt{font-size:calc(13px*var(--z));padding:2px calc(9px*var(--z));}
 
+/* ---------- AGENDA (telefon) ---------- */
+.agenda{padding:6px 10px 14px;}
+.ag-row{display:grid;grid-template-columns:52px 1fr;gap:11px;align-items:start;
+  padding:7px 0;cursor:pointer;}
+.ag-h{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;
+  color:var(--ink);padding-top:13px;text-align:right;}
+.ag-card{border:1px solid var(--line);border-left:4px solid var(--tp);border-radius:12px;
+  padding:13px 14px;background:var(--surface);}
+.ag-card.t-FIZJO{border-left-color:var(--fizjo);}
+.ag-card.t-MOTO{border-left-color:var(--moto);}
+.ag-card.t-MASAZ{border-left-color:var(--masaz);}
+.ag-row:active .ag-card{background:var(--surface-2);}
+.ag-top{display:flex;align-items:center;gap:8px;}
+.ag-nm{flex:1;font-size:16.5px;font-weight:600;letter-spacing:-.01em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ag-sub{font-size:12.5px;color:var(--muted);margin-top:3px;}
+.ag-row.bylo .ag-h{color:var(--muted);}
+.ag-row.bylo .ag-card{background:var(--surface-2);}
+.ag-row.bylo .ag-nm{color:var(--ink-2,#3C4048);}
+
+.ag-teraz{display:flex;align-items:center;gap:9px;margin:4px 0 4px 63px;}
+.ag-teraz:before{content:'';flex:1;height:2px;background:var(--red);border-radius:2px;}
+.ag-teraz span{font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;
+  color:var(--red);font-weight:600;}
+
+.ag-pusto{text-align:center;padding:48px 20px 40px;}
+.ag-pusto-i{font-size:30px;color:var(--line-2);line-height:1;}
+.ag-pusto-t{font-size:16px;color:var(--muted);margin:10px 0 18px;}
+.ag-pusto .btn{padding:12px 22px;}
+
+.ag-przelacz{display:block;width:100%;margin-top:14px;padding:11px;border:1px dashed var(--line-2);
+  background:transparent;border-radius:11px;color:var(--muted);font-family:inherit;
+  font-size:12.5px;cursor:pointer;}
+.ag-przelacz:active{background:var(--surface-2);}
+
 /* ---------- MIESIĄC ---------- */
 .mo-grid{display:grid;grid-template-columns:repeat(7,1fr);}
 .mo-dow{background:var(--surface);border-bottom:1px solid var(--line-2);padding:9px 4px;text-align:center;
@@ -278,10 +313,12 @@ body{background:var(--bg);color:var(--ink);
   .nav button{width:31px;height:31px;}
   .nav .today{padding:0 11px;}
   .hide-phone{display:none;}
-  .period{min-width:0;overflow:hidden;text-overflow:ellipsis;}
-  .zoom{padding:2px;}
-  .zoom span{display:none;}
-  .zoom button{width:26px;height:26px;font-size:15px;}
+  /* odstęp zjadał miejsce dacie — na telefonie zbędny */
+  .bar .spacer{display:none;}
+  .period{min-width:0;overflow:hidden;text-overflow:ellipsis;font-weight:600;}
+  /* legenda na telefonie tylko zabiera ekran — kolory widać w oknie wizyty */
+  .legend{display:none;}
+  .zoom{display:none;}   /* na telefonie niepotrzebny — karty są duże */
   .suggest{max-height:168px;}
   .row2{grid-template-columns:1fr 1fr;gap:9px;}
   .day-row{grid-template-columns:44px 1fr;padding:4px;gap:8px;}
@@ -896,6 +933,24 @@ function podobni(nazwa){
   if(q.length<2) return [];
   return clients.filter(c=>normName(c.name)!==q && tenSam(nazwa,c.name)).slice(0,4);
 }
+/* gdy okno jest otwarte, tło nie może się przewijać — na telefonie
+   gubiło to miejsce, w którym byłeś */
+let scrollPrzed=0;
+function odswiezBlokade(){
+  const otwarte = document.querySelectorAll('.ov.on').length>0;
+  const zablokowane = document.body.style.position==='fixed';
+  if(otwarte && !zablokowane){
+    scrollPrzed = window.scrollY;
+    document.body.style.position='fixed';
+    document.body.style.top = (-scrollPrzed)+'px';
+    document.body.style.left='0'; document.body.style.right='0';
+  } else if(!otwarte && zablokowane){
+    document.body.style.position=''; document.body.style.top='';
+    document.body.style.left=''; document.body.style.right='';
+    window.scrollTo(0, scrollPrzed);
+  }
+}
+
 function toast(m){
   const t=document.getElementById('toast');
   t.textContent=m;t.classList.add('on');
@@ -932,7 +987,7 @@ function ask(o){
     const alt=document.getElementById('ask-alt');
     document.getElementById('ask-acts2').style.display = o.alt ? 'flex' : 'none';
     if(o.alt){ alt.textContent=o.alt; alt.style.flex='1'; }
-    document.getElementById('ov-ask').classList.add('on');
+    document.getElementById('ov-ask').classList.add('on'); odswiezBlokade();
     setTimeout(()=>{
       const i=document.querySelector('#ask-body input');
       if(i){ i.focus(); i.select(); } else yes.focus();
@@ -945,7 +1000,7 @@ function askDone(co){
   document.querySelectorAll('#ask-body input').forEach(i=>{
     vals[i.id.replace('ask-f-','')]=i.value;
   });
-  document.getElementById('ov-ask').classList.remove('on');
+  document.getElementById('ov-ask').classList.remove('on'); odswiezBlokade();
   if(r) r(co?vals:null);
 }
 
@@ -1063,8 +1118,13 @@ function render(){
   try{ pokazDzisiaj(); }catch(e){ console.error(e); }
 }
 
-/* przewija tak, żeby dzisiejszy dzień i pierwsza wizyta były widoczne */
+/* Przewijamy TYLKO przy zmianie dnia/widoku — nie po każdym zapisie.
+   To było źródło „cofania się" przy dodawaniu i usuwaniu wizyt. */
+let ostatniSkok='';
 function pokazDzisiaj(){
+  const klucz = view+'|'+ymd(cursor);
+  if(klucz===ostatniSkok) return;
+  ostatniSkok=klucz;
   const wk=document.querySelector('.wk');
   if(wk){
     const kol=document.querySelector('.wk-head.is-today');
@@ -1136,8 +1196,70 @@ function renderWeek(){
   }
   document.getElementById('board').innerHTML=h+'</div></div>';
 }
+let pelneGodziny=false;
+try{ pelneGodziny = localStorage.getItem('moveu-cal-godziny')==='1'; }catch(e){}
+function przelaczGodziny(){
+  pelneGodziny=!pelneGodziny;
+  try{ localStorage.setItem('moveu-cal-godziny', pelneGodziny?'1':'0'); }catch(e){}
+  render();
+}
+
 function renderDay(){
   const ds=ymd(cursor), vs=visitsOn(ds);
+  const telefon = window.innerWidth<760;
+
+  /* Telefon: lista tego, co faktycznie jest. Bez 16 pustych wierszy. */
+  if(telefon && !pelneGodziny){
+    const teraz = new Date();
+    const dzis  = ds===todayYmd();
+    const minut = teraz.getHours()*60+teraz.getMinutes();
+    let h='<div class="agenda">';
+
+    if(vs.length===0){
+      h+='<div class="ag-pusto">'+
+         '<div class="ag-pusto-i">—</div>'+
+         '<div class="ag-pusto-t">Wolny dzień</div>'+
+         '<button class="btn" onclick="addAt(\''+ds+'\',10)">+ Dodaj wizytę</button>'+
+         '</div>';
+    } else {
+      let liniaWstawiona=false;
+      vs.forEach(v=>{
+        const p=String(v.time||'00:00').split(':');
+        const m=(+p[0])*60+(+p[1]);
+        if(dzis && !liniaWstawiona && m>minut){
+          h+='<div class="ag-teraz"><span>teraz</span></div>';
+          liniaWstawiona=true;
+        }
+        const c=clientById(v.clientId);
+        const pk=pktFor(v);
+        let bdg='';
+        if(pk){
+          if(pk.kind==='used') bdg='<span class="pkt used">'+pk.n+'/'+pk.size+'</span>';
+          if(pk.kind==='plan') bdg='<span class="pkt plan">'+pk.n+'/'+pk.size+'</span>';
+          if(pk.kind==='over') bdg='<span class="pkt over">poza</span>';
+          if(pk.kind==='brak') bdg='<span class="pkt none">—</span>';
+        } else if(billingOf(v.clientId)==='wizyta' && v.paid){
+          bdg='<span class="paid">✓</span>';
+        }
+        const minely = dzis && m<=minut;
+        h+='<div class="ag-row'+(minely?' bylo':'')+'" onclick="openVisit(\''+v.id+'\')">'+
+           '<div class="ag-h">'+esc(v.time||'')+'</div>'+
+           '<div class="ag-card t-'+v.type+'">'+
+             '<div class="ag-top"><span class="ag-nm">'+esc(c?c.name:'—')+'</span>'+bdg+'</div>'+
+             '<div class="ag-sub">'+(v.dur||60)+' min'+
+               (v.seriesId?' · ↻ co tydzień':'')+
+               ' · '+esc((TYPES.find(t=>t.k===v.type)||TYPES[0]).n)+
+             '</div>'+
+           '</div></div>';
+      });
+      if(dzis && !liniaWstawiona) h+='<div class="ag-teraz"><span>teraz</span></div>';
+    }
+    h+='<button class="ag-przelacz" onclick="przelaczGodziny()">Pokaż wszystkie godziny</button>';
+    document.getElementById('board').innerHTML=h+'</div>';
+    return;
+  }
+
+  /* Komputer albo tryb pełnych godzin */
   let h='<div class="day-list">';
   for(let hr=H_FROM;hr<=H_TO;hr++){
     const inSlot=vs.filter(v=>parseInt(String(v.time||'00:00').slice(0,2),10)===hr);
@@ -1146,6 +1268,7 @@ function renderDay(){
                      :'<button class="add" onclick="addAt(\''+ds+'\','+hr+')">+</button>')+
        '</div></div>';
   }
+  if(telefon) h+='<button class="ag-przelacz" onclick="przelaczGodziny()">Pokaż tylko wizyty</button>';
   document.getElementById('board').innerHTML=h+'</div>';
 }
 function renderMonth(){
@@ -1383,10 +1506,10 @@ function openVisit(id){
     }
   }
 
-  document.getElementById('ov-visit').classList.add('on');
+  document.getElementById('ov-visit').classList.add('on'); odswiezBlokade();
   document.getElementById('ov-visit').querySelector('.modal').scrollTop=0;
 }
-function closeVisit(){ document.getElementById('ov-visit').classList.remove('on'); editId=null; }
+function closeVisit(){ document.getElementById('ov-visit').classList.remove('on'); editId=null; odswiezBlokade(); }
 function addAt(ds,hr){
   openVisit(null);
   document.getElementById('f-date').value=ds;
@@ -1517,9 +1640,9 @@ function openDay(ds){
   document.getElementById('dm-body').innerHTML= vs.length
     ? '<div style="display:flex;flex-direction:column;gap:6px;">'+vs.map(evHtml).join('')+'</div>'
     : '<div class="empty">Brak wizyt.</div>';
-  document.getElementById('ov-day').classList.add('on');
+  document.getElementById('ov-day').classList.add('on'); odswiezBlokade();
 }
-function closeDay(){ document.getElementById('ov-day').classList.remove('on'); }
+function closeDay(){ document.getElementById('ov-day').classList.remove('on'); odswiezBlokade(); }
 function addFromDay(){
   const ds=dayModalDate; closeDay(); openVisit(null);
   document.getElementById('f-date').value=ds;
@@ -1529,8 +1652,8 @@ function addFromDay(){
    KLIENCI
    ============================================================ */
 function openClients(){ document.getElementById('cl-q').value=''; renderClientList();
-  document.getElementById('ov-clients').classList.add('on'); }
-function closeClients(){ document.getElementById('ov-clients').classList.remove('on'); }
+  document.getElementById('ov-clients').classList.add('on'); odswiezBlokade(); }
+function closeClients(){ document.getElementById('ov-clients').classList.remove('on'); odswiezBlokade(); }
 
 function renderClientList(){
   const q=normName(document.getElementById('cl-q').value);
@@ -1596,11 +1719,11 @@ function zoomBy(n){
 function openClient(id){
   cardClientId=id;
   renderClientCard();
-  document.getElementById('ov-client').classList.add('on');
+  document.getElementById('ov-client').classList.add('on'); odswiezBlokade();
 }
 function closeClient(){
   document.getElementById('ov-client').classList.remove('on');
-  cardClientId=null; renderClientList(); render();
+  cardClientId=null; renderClientList(); render(); odswiezBlokade();
 }
 function renderClientCard(){
   const c=clientById(cardClientId);
@@ -1695,7 +1818,7 @@ function checkPkt(){
   document.getElementById('pk-body').innerHTML=
     '<div class="note"><b>'+kand.name+'</b> wykorzystał wszystkie wejścia: <b>'+i.used+'/'+i.cap+'</b>.<br>'+
     'Kolejne wizyty będą oznaczone na czerwono jako <b>poza pakietem</b>, dopóki nie dodasz nowego.</div>';
-  document.getElementById('ov-pkt').classList.add('on');
+  document.getElementById('ov-pkt').classList.add('on'); odswiezBlokade();
 }
 async function pktAdd(){
   const c=clientById(pktClientId);
@@ -1718,9 +1841,9 @@ async function pktLater(){
 function openImport(){
   document.getElementById('imp-txt').value='';
   document.getElementById('imp-res').innerHTML='';
-  document.getElementById('ov-import').classList.add('on');
+  document.getElementById('ov-import').classList.add('on'); odswiezBlokade();
 }
-function closeImport(){ document.getElementById('ov-import').classList.remove('on'); }
+function closeImport(){ document.getElementById('ov-import').classList.remove('on'); odswiezBlokade(); }
 
 async function runImport(){
   const res=document.getElementById('imp-res');
