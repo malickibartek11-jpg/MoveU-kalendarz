@@ -688,22 +688,27 @@ const g = t => String(t||'').slice(0,5);
 const zBazy = {
   clients:  r => ({id:r.id, name:r.name, billing:r.billing||'wizyta', rate:r.rate, note:r.note}),
   visits:   r => ({id:r.id, clientId:r.client_id, date:r.date, time:g(r.time), dur:r.dur,
-                   type:r.type, paid:!!r.paid, price:r.price, fromSeries:r.from_series, note:r.note}),
+                   type:r.type, paid:!!r.paid, paidOn:r.paid_on, price:r.price,
+                   fromSeries:r.from_series, note:r.note}),
   series:   r => ({id:r.id, clientId:r.client_id, dow:r.dow, time:g(r.time), dur:r.dur,
                    type:r.type, from:r.from_date, until:r.until_date, skips:r.skips||[]}),
-  packages: r => ({id:r.id, clientId:r.client_id, size:r.size, from:r.from_date, paid:!!r.paid})
+  packages: r => ({id:r.id, clientId:r.client_id, size:r.size, from:r.from_date,
+                   paid:!!r.paid, paidOn:r.paid_on, amount:r.amount})
 };
 /* ---- zamiana: obiekt w aplikacji  →  wiersz do bazy ---- */
 const doBazy = {
   clients:  o => ({id:o.id, name:o.name, billing:o.billing||'wizyta',
                    rate:(o.rate==null?null:+o.rate), note:o.note||null}),
   visits:   o => ({id:o.id, client_id:o.clientId, date:o.date, time:o.time, dur:+o.dur||60,
-                   type:o.type||'TP', paid:!!o.paid, price:(o.price==null?null:+o.price),
+                   type:o.type||'TP', paid:!!o.paid, paid_on:o.paidOn||null,
+                   price:(o.price==null?null:+o.price),
                    from_series:o.fromSeries||null, note:o.note||null}),
   series:   o => ({id:o.id, client_id:o.clientId, dow:+o.dow, time:o.time, dur:+o.dur||60,
                    type:o.type||'TP', from_date:o.from, until_date:o.until||null,
                    skips:o.skips||[]}),
-  packages: o => ({id:o.id, client_id:o.clientId, size:+o.size||10, from_date:o.from, paid:!!o.paid})
+  packages: o => ({id:o.id, client_id:o.clientId, size:+o.size||10, from_date:o.from,
+                   paid:!!o.paid, paid_on:o.paidOn||null,
+                   amount:(o.amount==null?null:+o.amount)})
 };
 
 /* ---- wczytanie wszystkiego ---- */
@@ -936,7 +941,7 @@ function started(ds,tm){
 }
 
 /* ---------- stan ---------- */
-let view='tydzien', cursor=new Date(), editId=null, formType='TP', formPaid=false,
+let view='tydzien', cursor=new Date(), editId=null, formType='TP', formPaid=false, formPaidOn=null,
     dayModalDate=null, cardClientId=null, pktClientId=null;
 
 function uid(){ return crypto.randomUUID(); }
@@ -1600,6 +1605,7 @@ function renderTypeTiles(){
 function setType(k){ formType=k; renderTypeTiles(); }
 function setPaid(b){
   formPaid=b;
+  formPaidOn = b ? (formPaidOn||todayYmd()) : null;
   document.getElementById('f-paid-yes').classList.toggle('on',b);
   document.getElementById('f-paid-no').classList.toggle('on',!b);
 }
@@ -1649,6 +1655,7 @@ function openVisit(id){
 
   formType=v?v.type:'TP';
   renderTypeTiles();
+  formPaidOn = v ? (v.paidOn||null) : null;
   setPaid(v?!!v.paid:false);
 
   clearClient();
@@ -1716,6 +1723,7 @@ async function saveVisit(){
       const s=seriesById(stara.seriesId);
       if(s){ s.skips=(s.skips||[]).concat([stara.date]); await saveSeries(); }
       visits.push({id:uid(),clientId:c.id,date,time,dur,type:formType,paid:formPaid,
+                   paidOn:formPaid?(formPaidOn||todayYmd()):null,
                    price:(c.rate==null?null:c.rate),seriesId:null,fromSeries:stara.seriesId});
       await saveVisits(); closeVisit(); render(); checkPkt();
       toast('Zmieniono tylko tę wizytę — reszta serii bez zmian');
@@ -1725,6 +1733,7 @@ async function saveVisit(){
       toast('Ta wizyta już jest'); return;
     }
     visits=visits.map(v=>v.id===editId?{...v,clientId:c.id,date,time,dur,type:formType,paid:formPaid,
+      paidOn:formPaid?(v.paidOn||formPaidOn||todayYmd()):null,
       price:(v.price!=null?v.price:(c.rate==null?null:c.rate))}:v);
     await saveVisits(); closeVisit(); render(); checkPkt(); toast('Zapisano');
     return;
@@ -1748,6 +1757,7 @@ async function saveVisit(){
     toast('Ta wizyta już jest w kalendarzu'); return;
   }
   visits.push({id:uid(),clientId:c.id,date,time,dur,type:formType,paid:formPaid,
+               paidOn:formPaid?(formPaidOn||todayYmd()):null,
                price:(c.rate==null?null:c.rate),seriesId:null});
   await saveVisits(); closeVisit(); render(); checkPkt(); toast(c.name+' — dodana');
 }
@@ -1930,12 +1940,17 @@ function renderClientCard(){
   } else {
     h+='<div class="note">Wykorzystane: <b>'+i.used+' z '+i.cap+'</b>'+
        (i.used>=i.cap?' — <b>pakiet wyczerpany</b>':'')+'</div>';
-    h+=pk.map((p,idx)=>
-      '<div class="crow" style="cursor:default;">'+
+    h+=pk.map((p,idx)=>{
+      const kasa = p.paidOn
+        ? '<b>'+(p.amount!=null? p.amount+' zł' : 'zapłacony')+'</b> · '+p.paidOn
+        : '<b style="color:var(--red)">niezapłacony</b>';
+      return '<div class="crow" style="cursor:default;align-items:flex-start;">'+
       '<div class="cn">Pakiet '+(idx+1)+' — '+(p.size||PKT_SIZE)+' wejść'+
-      '<div class="cb">od '+p.from+'</div></div>'+
-      '<button class="btn btn-ghost btn-sm btn-danger" onclick="delPackage(\''+p.id+'\')">Usuń</button></div>'
-    ).join('');
+      '<div class="cb">od '+p.from+' · '+kasa+'</div></div>'+
+      '<button class="btn btn-ghost btn-sm" onclick="oplacPakiet(\''+p.id+'\')">'+
+        (p.paidOn?'Zmień':'Wpłata')+'</button>'+
+      '<button class="btn btn-ghost btn-sm btn-danger" onclick="delPackage(\''+p.id+'\')">Usuń</button></div>';
+    }).join('');
   }
   h+='</div><div class="acts" style="margin-top:4px;">'+
      '<button class="btn btn-ghost" onclick="addPackage()">+ Pakiet 10 wejść</button></div>';
@@ -1974,6 +1989,33 @@ async function addPackage(){
   await savePackages(); renderClientCard(); render();
   toast('Pakiet dodany — wizyty od '+from+' zaczną się numerować');
 }
+/* Data wpłaty decyduje, w którym miesiącu pakiet wpadnie do przychodu.
+   Wizyty z pakietu liczą się jako 0 zł — są już opłacone. */
+async function oplacPakiet(id){
+  const pk=packages.find(x=>x.id===id);
+  if(!pk) return;
+  const c=clientById(pk.clientId);
+  const sugerowana = (c&&c.rate) ? (c.rate*(pk.size||PKT_SIZE)) : '';
+  const r=await ask({
+    title:'Wpłata za pakiet',
+    html:'<b>'+esc(c?c.name:'')+'</b> — '+(pk.size||PKT_SIZE)+' wejść<br><br>'+
+         'Przychód wpadnie w miesiąc <b>daty wpłaty</b>, nie w miesiąc wizyt. '+
+         'Jeśli zapłacił we wrześniu, a ćwiczy w październiku — wpisz wrzesień.',
+    ok:'Zapisz', cancel:'Anuluj',
+    fields:[{name:'kiedy',label:'Data wpłaty',type:'date',value:pk.paidOn||todayYmd()},
+            {name:'ile',  label:'Kwota (zł)',  type:'number',
+             value:(pk.amount!=null?pk.amount:sugerowana)}]
+  });
+  if(!r) return;
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(r.kiedy||'')){ toast('Podaj datę wpłaty'); return; }
+  pk.paidOn=r.kiedy;
+  pk.amount=(r.ile===''?null:+r.ile);
+  pk.paid=true;
+  const ok=await savePackages();
+  if(ok){ renderClientCard(); render();
+          toast('Wpłata '+(pk.amount!=null?pk.amount+' zł ':'')+'zapisana na '+r.kiedy); }
+}
+
 async function delPackage(id){
   const ok=await ask({title:'Usunąć pakiet?',
     html:'Numeracja wizyt przeliczy się od nowa.', ok:'Usuń', danger:true});
