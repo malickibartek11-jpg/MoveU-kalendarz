@@ -27,7 +27,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{margin:0;padding:0;}
 body{background:var(--bg);color:var(--ink);
-  font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.45;
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Inter',system-ui,sans-serif;font-size:15px;line-height:1.45;
   -webkit-font-smoothing:antialiased;letter-spacing:-.005em;}
 .wrap{max-width:1400px;margin:0 auto;padding:16px;}
 
@@ -124,6 +124,91 @@ body{background:var(--bg);color:var(--ink);
 .day-row .ev{font-size:calc(16px*var(--z));padding:calc(10px*var(--z)) calc(12px*var(--z));}
 .day-row .ev .mt{font-size:calc(13px*var(--z));}
 .day-row .pkt{font-size:calc(13px*var(--z));padding:2px calc(9px*var(--z));}
+
+/* ================= UKŁAD iOS ================= */
+:root{ --ios-red:#FF3B30; --ios-grey:#8E8E93; --ios-line:#E5E5EA; --hpx:58px; }
+
+/* oś godzin */
+.tl-wrap{position:relative;overflow-x:auto;}
+.tl{position:relative;padding:10px 0 18px;}
+.tl-bg{position:relative;}
+.tl-h{position:absolute;left:0;width:46px;text-align:right;font-size:11px;
+  color:var(--ios-grey);transform:translateY(-6px);letter-spacing:-.01em;}
+.tl-l{position:absolute;left:54px;right:10px;height:1px;background:var(--ios-line);}
+.tl-l.pol{left:54px;background:transparent;border-top:1px dashed #EFEFF2;}
+.tl-h{z-index:1;}
+.tl-l{z-index:1;}
+/* bloki żyją we własnym obszarze, na prawo od kolumny z godzinami */
+.tl-area{position:absolute;left:54px;right:10px;top:0;bottom:0;z-index:3;}
+.tl-click{position:absolute;left:0;right:0;cursor:pointer;z-index:2;}
+.tl-click:active{background:rgba(0,0,0,.03);}
+
+.tl-ev{position:absolute;z-index:4;border-radius:7px;padding:3px 7px;overflow:hidden;cursor:pointer;
+  background:#F2F2F7;border-left:3px solid var(--tp);line-height:1.25;}
+.tl-ev.t-FIZJO{border-left-color:var(--fizjo);background:#EDF3F9;}
+.tl-ev.t-MOTO{border-left-color:var(--moto);background:#FBF3E9;}
+.tl-ev.t-MASAZ{border-left-color:var(--masaz);background:#F5F0F8;}
+.tl-ev .n{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  letter-spacing:-.01em;}
+.tl-ev .t{font-size:11px;color:var(--ios-grey);white-space:nowrap;overflow:hidden;}
+.tl-ev.krotka{padding:1px 7px;}
+.tl-ev.krotka .n{font-size:12px;}
+.tl-ev.minela{opacity:.55;}
+.tl-ev .b{float:right;font-size:10px;font-family:'JetBrains Mono',monospace;
+  background:var(--ink);color:#fff;border-radius:20px;padding:0 5px;margin-left:4px;}
+.tl-ev .b.plan{background:#D7D7DC;color:#5B5B60;}
+.tl-ev .b.over{background:var(--ios-red);color:#fff;}
+
+/* czerwona linia „teraz" */
+.tl-now{position:absolute;left:40px;right:10px;height:2px;background:var(--ios-red);z-index:5;
+  pointer-events:none;}
+.tl-now:before{content:'';position:absolute;left:0;top:-4px;width:10px;height:10px;
+  border-radius:50%;background:var(--ios-red);}
+
+/* nagłówek dni w widoku tygodnia */
+.tl-dni{display:grid;grid-template-columns:54px repeat(7,1fr);position:sticky;top:0;z-index:6;
+  background:var(--surface);border-bottom:1px solid var(--ios-line);padding-bottom:7px;padding-top:9px;}
+.tl-dni .d{text-align:center;}
+.tl-dni .d .w{font-size:11px;color:var(--ios-grey);text-transform:uppercase;letter-spacing:.02em;}
+.tl-dni .d .n{font-size:19px;font-weight:600;letter-spacing:-.02em;margin-top:2px;}
+.tl-dni .d.dzis .w{color:var(--ios-red);}
+.tl-dni .d.dzis .n{background:var(--ios-red);color:#fff;width:30px;height:30px;border-radius:50%;
+  display:inline-grid;place-items:center;font-size:16px;}
+
+/* ================= MIESIĄC iOS ================= */
+.mc{padding:0 8px 10px;}
+.mc-dow{display:grid;grid-template-columns:repeat(7,1fr);padding:7px 0 5px;}
+.mc-dow div{text-align:center;font-size:11px;color:var(--ios-grey);font-weight:500;}
+.mc-grid{display:grid;grid-template-columns:repeat(7,1fr);}
+.mc-d{aspect-ratio:1/1.08;display:flex;flex-direction:column;align-items:center;
+  justify-content:flex-start;padding-top:6px;cursor:pointer;border-top:1px solid var(--ios-line);}
+.mc-d .num{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;
+  font-size:16px;font-weight:400;letter-spacing:-.02em;}
+.mc-d.obok .num{color:#C7C7CC;}
+.mc-d.dzis .num{color:var(--ios-red);font-weight:600;}
+.mc-d.wyb .num{background:var(--ink);color:#fff;font-weight:600;}
+.mc-d.dzis.wyb .num{background:var(--ios-red);color:#fff;}
+.mc-kropki{display:flex;gap:2px;margin-top:2px;height:5px;}
+.mc-kropki i{width:5px;height:5px;border-radius:50%;background:var(--tp);display:block;}
+.mc-kropki i.t-FIZJO{background:var(--fizjo);}
+.mc-kropki i.t-MOTO{background:var(--moto);}
+.mc-kropki i.t-MASAZ{background:var(--masaz);}
+
+.mc-lista{border-top:8px solid #F2F2F7;margin-top:8px;}
+.mc-lista .tyt{font-size:12.5px;color:var(--ios-grey);padding:12px 16px 7px;font-weight:500;}
+.mc-row{display:flex;align-items:center;gap:11px;padding:11px 16px;
+  border-bottom:1px solid var(--ios-line);cursor:pointer;}
+.mc-row:active{background:#F2F2F7;}
+.mc-row .kropka{width:9px;height:9px;border-radius:50%;background:var(--tp);flex:0 0 auto;}
+.mc-row .kropka.t-FIZJO{background:var(--fizjo);}
+.mc-row .kropka.t-MOTO{background:var(--moto);}
+.mc-row .kropka.t-MASAZ{background:var(--masaz);}
+.mc-row .txt{flex:1;min-width:0;}
+.mc-row .nm{font-size:15.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  letter-spacing:-.01em;}
+.mc-row .sub{font-size:12.5px;color:var(--ios-grey);margin-top:1px;}
+.mc-row .godz{font-size:14px;color:var(--ios-grey);font-variant-numeric:tabular-nums;}
+.mc-pusto{padding:26px 16px;text-align:center;color:var(--ios-grey);font-size:14px;}
 
 /* ---------- AGENDA (telefon) ---------- */
 .agenda{padding:6px 10px 14px;}
@@ -1154,7 +1239,7 @@ function renderPeriod(){
     const m=mondayOf(cursor),s=addDays(m,6);
     el.textContent=m.getDate()+(m.getMonth()!==s.getMonth()?' '+MONTHS[m.getMonth()].slice(0,3):'')+
                    '–'+s.getDate()+' '+M(s.getMonth());
-  } else { el.textContent=M(cursor.getMonth())+' '+cursor.getFullYear(); }
+  } else { el.textContent=MONTHS[cursor.getMonth()]+' '+cursor.getFullYear(); }
 }
 
 function evHtml(v){
@@ -1176,117 +1261,209 @@ function evHtml(v){
          (v.seriesId?'<span class="rep">↻</span>':'')+'</div></div>';
 }
 
-function renderWeek(){
-  const m=mondayOf(cursor), t=todayYmd();
-  let h='<div class="wk"><div class="wk-grid"><div class="wk-head"></div>';
-  for(let i=0;i<7;i++){
-    const d=addDays(m,i), ds=ymd(d);
-    h+='<div class="wk-head'+(ds===t?' is-today':'')+'">'+
-       '<div class="dow">'+DOW[i]+'</div><div class="dnum">'+d.getDate()+'</div></div>';
-  }
-  for(let hr=H_FROM;hr<=H_TO;hr++){
-    h+='<div class="hcell">'+String(hr).padStart(2,'0')+':00</div>';
-    for(let i=0;i<7;i++){
-      const ds=ymd(addDays(m,i));
-      const inSlot=visitsOn(ds).filter(v=>parseInt(String(v.time||'00:00').slice(0,2),10)===hr);
-      h+='<div class="slot'+(ds===t?' dzis':(i>=5?' weekend':''))+'" data-date="'+ds+'" data-hour="'+hr+'" '+
-         'ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropOn(event)" '+
-         'onclick="addAt(\''+ds+'\','+hr+')">'+inSlot.map(evHtml).join('')+'</div>';
-    }
-  }
-  document.getElementById('board').innerHTML=h+'</div></div>';
-}
-let pelneGodziny=false;
-try{ pelneGodziny = localStorage.getItem('moveu-cal-godziny')==='1'; }catch(e){}
-function przelaczGodziny(){
-  pelneGodziny=!pelneGodziny;
-  try{ localStorage.setItem('moveu-cal-godziny', pelneGodziny?'1':'0'); }catch(e){}
-  render();
+/* ============================================================
+   UKŁAD OSI GODZIN — jak w kalendarzu iOS.
+   Wizyty to bloki o wysokości proporcjonalnej do czasu trwania,
+   nachodzące na siebie dzielą szerokość między siebie.
+   ============================================================ */
+function hpx(){ return 58 * (ZOOMY[zoomIdx]||1); }
+function minuty(t){ const p=String(t||'00:00').split(':'); return (+p[0])*60+(+p[1]||0); }
+
+function ukladDnia(vs){
+  const el = vs.map(v=>({v, od:minuty(v.time), do:minuty(v.time)+(+v.dur||60)}))
+               .sort((a,b)=> a.od-b.od || a.do-b.do);
+  /* grupy nachodzących na siebie */
+  let grupa=[], koniec=-1, wynik=[];
+  const domknij=()=>{
+    if(!grupa.length) return;
+    const kol=[];                       // kol[i] = koniec ostatniej wizyty w kolumnie i
+    grupa.forEach(e=>{
+      let c=0; while(c<kol.length && kol[c]>e.od) c++;
+      e.kol=c; kol[c]=e.do;
+    });
+    const ile=kol.length;
+    grupa.forEach(e=>{ e.ile=ile; wynik.push(e); });
+    grupa=[];
+  };
+  el.forEach(e=>{
+    if(grupa.length && e.od >= koniec) { domknij(); koniec=-1; }
+    grupa.push(e);
+    koniec = Math.max(koniec, e.do);
+  });
+  domknij();
+  return wynik;
 }
 
+function blokHtml(e, lewoProc, szerProc){
+  const v=e.v, h=hpx();
+  const top = (e.od - H_FROM*60)/60*h;
+  const wys = Math.max(20, (e.do-e.od)/60*h - 2);
+  const c = clientById(v.clientId);
+  const pk = pktFor(v);
+  let b='';
+  if(pk){
+    if(pk.kind==='used') b='<span class="b">'+pk.n+'/'+pk.size+'</span>';
+    if(pk.kind==='plan') b='<span class="b plan">'+pk.n+'/'+pk.size+'</span>';
+    if(pk.kind==='over') b='<span class="b over">poza</span>';
+  } else if(billingOf(v.clientId)==='wizyta' && v.paid){
+    b='<span class="b">✓</span>';
+  }
+  const minela = (v.date < todayYmd()) ||
+                 (v.date===todayYmd() && e.do <= (new Date().getHours()*60+new Date().getMinutes()));
+  const krotka = wys < 40;
+  return '<div class="tl-ev t-'+v.type+(krotka?' krotka':'')+(minela?' minela':'')+'" '+
+    'style="top:'+top+'px;height:'+wys+'px;left:'+lewoProc+'%;width:'+szerProc+'%;" '+
+    'draggable="true" ondragstart="dragStart(event,\''+v.id+'\')" '+
+    'onclick="event.stopPropagation();openVisit(\''+v.id+'\')">'+
+    '<div class="n">'+b+esc(c?c.name:'—')+'</div>'+
+    (krotka?'':'<div class="t">'+esc(v.time||'')+' · '+(v.dur||60)+' min'+(v.seriesId?' ↻':'')+'</div>')+
+    '</div>';
+}
+
+function liniaTeraz(){
+  const t=new Date(), m=t.getHours()*60+t.getMinutes();
+  if(m < H_FROM*60 || m > (H_TO+1)*60) return '';
+  return '<div class="tl-now" style="top:'+((m-H_FROM*60)/60*hpx())+'px;"></div>';
+}
+
+function tloGodzin(ds, kolumny){
+  const h=hpx(); let out='';
+  for(let g=H_FROM; g<=H_TO+1; g++){
+    const y=(g-H_FROM)*h;
+    out += '<div class="tl-h" style="top:'+y+'px;">'+String(g).padStart(2,'0')+':00</div>';
+    out += '<div class="tl-l" style="top:'+y+'px;"></div>';
+    if(g<=H_TO) out += '<div class="tl-l pol" style="top:'+(y+h/2)+'px;"></div>';
+  }
+  if(ds){
+    for(let g=H_FROM; g<=H_TO; g++){
+      out += '<div class="tl-click" style="top:'+((g-H_FROM)*h)+'px;height:'+h+'px;" '+
+             'ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropOn(event)" '+
+             'data-date="'+ds+'" data-hour="'+g+'" onclick="addAt(\''+ds+'\','+g+')"></div>';
+    }
+  }
+  return out;
+}
+
+/* ---------- DZIEŃ ---------- */
 function renderDay(){
   const ds=ymd(cursor), vs=visitsOn(ds);
-  const telefon = window.innerWidth<760;
-
-  /* Telefon: lista tego, co faktycznie jest. Bez 16 pustych wierszy. */
-  if(telefon && !pelneGodziny){
-    const teraz = new Date();
-    const dzis  = ds===todayYmd();
-    const minut = teraz.getHours()*60+teraz.getMinutes();
-    let h='<div class="agenda">';
-
-    if(vs.length===0){
-      h+='<div class="ag-pusto">'+
-         '<div class="ag-pusto-i">—</div>'+
-         '<div class="ag-pusto-t">Wolny dzień</div>'+
-         '<button class="btn" onclick="addAt(\''+ds+'\',10)">+ Dodaj wizytę</button>'+
-         '</div>';
-    } else {
-      let liniaWstawiona=false;
-      vs.forEach(v=>{
-        const p=String(v.time||'00:00').split(':');
-        const m=(+p[0])*60+(+p[1]);
-        if(dzis && !liniaWstawiona && m>minut){
-          h+='<div class="ag-teraz"><span>teraz</span></div>';
-          liniaWstawiona=true;
-        }
-        const c=clientById(v.clientId);
-        const pk=pktFor(v);
-        let bdg='';
-        if(pk){
-          if(pk.kind==='used') bdg='<span class="pkt used">'+pk.n+'/'+pk.size+'</span>';
-          if(pk.kind==='plan') bdg='<span class="pkt plan">'+pk.n+'/'+pk.size+'</span>';
-          if(pk.kind==='over') bdg='<span class="pkt over">poza</span>';
-          if(pk.kind==='brak') bdg='<span class="pkt none">—</span>';
-        } else if(billingOf(v.clientId)==='wizyta' && v.paid){
-          bdg='<span class="paid">✓</span>';
-        }
-        const minely = dzis && m<=minut;
-        h+='<div class="ag-row'+(minely?' bylo':'')+'" onclick="openVisit(\''+v.id+'\')">'+
-           '<div class="ag-h">'+esc(v.time||'')+'</div>'+
-           '<div class="ag-card t-'+v.type+'">'+
-             '<div class="ag-top"><span class="ag-nm">'+esc(c?c.name:'—')+'</span>'+bdg+'</div>'+
-             '<div class="ag-sub">'+(v.dur||60)+' min'+
-               (v.seriesId?' · ↻ co tydzień':'')+
-               ' · '+esc((TYPES.find(t=>t.k===v.type)||TYPES[0]).n)+
-             '</div>'+
-           '</div></div>';
-      });
-      if(dzis && !liniaWstawiona) h+='<div class="ag-teraz"><span>teraz</span></div>';
-    }
-    h+='<button class="ag-przelacz" onclick="przelaczGodziny()">Pokaż wszystkie godziny</button>';
-    document.getElementById('board').innerHTML=h+'</div>';
-    return;
+  const h=hpx(), wysCal=(H_TO+1-H_FROM)*h+20;
+  let out='<div class="tl-wrap"><div class="tl"><div class="tl-bg" style="height:'+wysCal+'px;">';
+  out += tloGodzin(null, 1);
+  out += '<div class="tl-area">';
+  for(let g=H_FROM; g<=H_TO; g++){
+    out += '<div class="tl-click" style="top:'+((g-H_FROM)*h)+'px;height:'+h+'px;" '+
+           'ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropOn(event)" '+
+           'data-date="'+ds+'" data-hour="'+g+'" onclick="addAt(\''+ds+'\','+g+')"></div>';
   }
-
-  /* Komputer albo tryb pełnych godzin */
-  let h='<div class="day-list">';
-  for(let hr=H_FROM;hr<=H_TO;hr++){
-    const inSlot=vs.filter(v=>parseInt(String(v.time||'00:00').slice(0,2),10)===hr);
-    h+='<div class="day-row"><div class="hr">'+String(hr).padStart(2,'0')+':00</div><div class="box">'+
-       (inSlot.length?inSlot.map(evHtml).join('')
-                     :'<button class="add" onclick="addAt(\''+ds+'\','+hr+')">+</button>')+
-       '</div></div>';
-  }
-  if(telefon) h+='<button class="ag-przelacz" onclick="przelaczGodziny()">Pokaż tylko wizyty</button>';
-  document.getElementById('board').innerHTML=h+'</div>';
+  ukladDnia(vs).forEach(e=>{
+    const szer = 100/e.ile;
+    out += blokHtml(e, e.kol*szer, szer-1);
+  });
+  out += '</div>';
+  if(ds===todayYmd()) out += liniaTeraz();
+  document.getElementById('board').innerHTML = out+'</div></div></div>';
 }
+
+/* ---------- TYDZIEŃ ---------- */
+function renderWeek(){
+  const m=mondayOf(cursor), t=todayYmd(), h=hpx();
+  const wysCal=(H_TO+1-H_FROM)*h+20;
+  let naglowek='<div class="tl-dni"><div></div>';
+  for(let i=0;i<7;i++){
+    const d=addDays(m,i), ds=ymd(d);
+    naglowek+='<div class="d'+(ds===t?' dzis':'')+'">'+
+      '<div class="w">'+DOW[i]+'</div><div class="n">'+d.getDate()+'</div></div>';
+  }
+  naglowek+='</div>';
+
+  let kol='';
+  for(let i=0;i<7;i++){
+    const ds=ymd(addDays(m,i));
+    const lewo = (100/7)*i;
+    ukladDnia(visitsOn(ds)).forEach(e=>{
+      const szerDnia=100/7;
+      const szer = szerDnia/e.ile;
+      kol += blokHtml(e, lewo + e.kol*szer, szer-0.6);
+    });
+  }
+  /* klikalne kolumny dni — wewnątrz obszaru, więc zwykłe procenty */
+  let klik='';
+  for(let i=0;i<7;i++){
+    const ds=ymd(addDays(m,i));
+    for(let g=H_FROM; g<=H_TO; g++){
+      klik += '<div class="tl-click" style="top:'+((g-H_FROM)*h)+'px;height:'+h+'px;'+
+        'left:'+((100/7)*i)+'%;width:'+(100/7)+'%;" '+
+        'ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropOn(event)" '+
+        'data-date="'+ds+'" data-hour="'+g+'" onclick="addAt(\''+ds+'\','+g+')"></div>';
+    }
+  }
+  const dzisWTyg = (todayYmd()>=ymd(m) && todayYmd()<=ymd(addDays(m,6)));
+  document.getElementById('board').innerHTML =
+    '<div class="tl-wrap">'+naglowek+'<div class="tl"><div class="tl-bg" style="height:'+wysCal+'px;">'+
+    tloGodzin(null,7)+'<div class="tl-area">'+klik+kol+'</div>'+
+    (dzisWTyg?liniaTeraz():'')+'</div></div></div>';
+}
+
+/* ---------- MIESIĄC ---------- */
+let wybranyDzien=null;
+function wybierzDzien(ds){ wybranyDzien=ds; renderMonth(); }
+
 function renderMonth(){
   const y=cursor.getFullYear(), mo=cursor.getMonth();
   const first=mondayOf(new Date(y,mo,1)), last=new Date(y,mo+1,0);
   const cells=Math.ceil((Math.round((mondayOf(last)-first)/86400000)+7)/7)*7;
   const t=todayYmd();
-  let h='<div class="mo-grid">';
-  DOW.forEach(d=>h+='<div class="mo-dow">'+d+'</div>');
-  for(let i=0;i<cells;i++){
-    const d=addDays(first,i), ds=ymd(d), off=d.getMonth()!==mo, vs=visitsOn(ds);
-    h+='<div class="mo-cell'+(off?' off':'')+(ds===t?' is-today':'')+'" onclick="openDay(\''+ds+'\')">'+
-       '<div class="d">'+d.getDate()+'</div>'+
-       (vs.length?'<div class="mo-dots">'+vs.slice(0,10).map(v=>'<i class="t-'+v.type+'"></i>').join('')+
-                  '</div><div class="c">'+vs.length+' wizyt</div>':'')+'</div>';
+  if(!wybranyDzien || parseYmd(wybranyDzien).getMonth()!==mo ||
+     parseYmd(wybranyDzien).getFullYear()!==y){
+    wybranyDzien = (new Date(y,mo,1) <= new Date() && last >= new Date()) ? t : ymd(new Date(y,mo,1));
   }
-  document.getElementById('board').innerHTML=h+'</div>';
+
+  let h='<div class="mc"><div class="mc-dow">'+
+        ['Pn','Wt','Śr','Cz','Pt','So','Nd'].map(d=>'<div>'+d+'</div>').join('')+
+        '</div><div class="mc-grid">';
+  for(let i=0;i<cells;i++){
+    const d=addDays(first,i), ds=ymd(d), obok=d.getMonth()!==mo;
+    const vs=visitsOn(ds);
+    const kropki=[...new Set(vs.map(v=>v.type))].slice(0,4)
+      .map(tp=>'<i class="t-'+tp+'"></i>').join('');
+    h+='<div class="mc-d'+(obok?' obok':'')+(ds===t?' dzis':'')+(ds===wybranyDzien?' wyb':'')+'" '+
+       'onclick="wybierzDzien(\''+ds+'\')">'+
+       '<div class="num">'+d.getDate()+'</div>'+
+       '<div class="mc-kropki">'+kropki+'</div></div>';
+  }
+  h+='</div></div>';
+
+  /* lista wybranego dnia pod spodem */
+  const vs=visitsOn(wybranyDzien);
+  const dd=parseYmd(wybranyDzien);
+  h+='<div class="mc-lista"><div class="tyt">'+
+     DOW[dowIdx(wybranyDzien)]+', '+dd.getDate()+' '+MONTHS[dd.getMonth()]+
+     (vs.length?' · '+vs.length+' wizyt':'')+'</div>';
+  if(!vs.length){
+    h+='<div class="mc-pusto">Brak wizyt</div>';
+  } else {
+    h+=vs.map(v=>{
+      const c=clientById(v.clientId);
+      const pk=pktFor(v);
+      let dod='';
+      if(pk&&(pk.kind==='used'||pk.kind==='plan')) dod=' · '+pk.n+'/'+pk.size;
+      else if(pk&&pk.kind==='over') dod=' · poza pakietem';
+      else if(billingOf(v.clientId)==='wizyta'&&v.paid) dod=' · ✓ rozliczona';
+      return '<div class="mc-row" onclick="openVisit(\''+v.id+'\')">'+
+        '<span class="kropka t-'+v.type+'"></span>'+
+        '<div class="txt"><div class="nm">'+esc(c?c.name:'—')+'</div>'+
+        '<div class="sub">'+esc((TYPES.find(x=>x.k===v.type)||TYPES[0]).n)+
+        ' · '+(v.dur||60)+' min'+(v.seriesId?' · ↻':'')+dod+'</div></div>'+
+        '<span class="godz">'+esc(v.time||'')+'</span></div>';
+    }).join('');
+  }
+  h+='<div style="padding:13px 16px;"><button class="btn" style="width:100%;" '+
+     'onclick="addAt(\''+wybranyDzien+'\',10)">+ Dodaj wizytę tego dnia</button></div></div>';
+
+  document.getElementById('board').innerHTML=h;
 }
+
 
 /* ---------- przeciąganie ---------- */
 let dragId=null;
@@ -1927,23 +2104,7 @@ function startKalendarz(){
     zoomBy(e.deltaY<0?1:-1);
   },{passive:false});
 
-  /* telefon: przesunięcie palcem w bok = poprzedni / następny dzień */
-  let tx=0, ty=0, tt=0;
-  board.addEventListener('touchstart',e=>{
-    if(e.touches.length!==1) return;
-    tx=e.touches[0].clientX; ty=e.touches[0].clientY; tt=Date.now();
-  },{passive:true});
-  board.addEventListener('touchend',e=>{
-    if(!tt) return;
-    const t=e.changedTouches[0];
-    const dx=t.clientX-tx, dy=t.clientY-ty, czas=Date.now()-tt;
-    tt=0;
-    /* tylko wyraźny, szybki ruch w poziomie — żeby nie kolidował ze scrollem */
-    if(czas<600 && Math.abs(dx)>70 && Math.abs(dx)>Math.abs(dy)*2){
-      shift(dx<0?1:-1);
-      toast(document.getElementById('period').textContent);
-    }
-  },{passive:true});
+  /* gest przesuwania palcem usunięty — łapał zwykłe przewijanie */
 
   document.addEventListener('keydown',e=>{
     if(e.key==='Escape'){ closeVisit(); closeDay(); closeClients(); closeClient(); closeImport(); }
