@@ -159,11 +159,32 @@ body{background:var(--bg);color:var(--ink);
 .tl-ev .b.plan{background:#D7D7DC;color:#5B5B60;}
 .tl-ev .b.over{background:var(--ios-red);color:#fff;}
 
+/* pasek tygodnia nad dniem — jak w kalendarzu telefonu */
+.ws{display:grid;grid-template-columns:repeat(7,1fr);padding:7px 4px 9px;
+  background:var(--surface);border-bottom:1px solid var(--ios-line);
+  position:sticky;top:0;z-index:8;}
+.ws-d{text-align:center;cursor:pointer;}
+.ws-w{font-size:11px;color:var(--ios-grey);font-weight:500;}
+.ws-n{font-size:19px;font-weight:400;margin-top:2px;width:34px;height:34px;border-radius:50%;
+  display:inline-grid;place-items:center;letter-spacing:-.02em;}
+.ws-d.wk .ws-w,.ws-d.wk .ws-n{color:var(--muted);}
+.ws-d.dzis .ws-n{color:var(--ios-red);font-weight:600;}
+.ws-d.wyb .ws-n{background:var(--ink);color:#fff;font-weight:600;}
+.ws-d.dzis.wyb .ws-n{background:var(--ios-red);color:#fff;}
+.ws-d:active .ws-n{background:var(--surface-2);}
+.ws-kropka{height:4px;display:flex;justify-content:center;gap:2px;margin-top:1px;}
+.ws-kropka i{width:4px;height:4px;border-radius:50%;background:var(--muted);display:block;}
+.ws-d.wyb .ws-kropka i{background:var(--ink);}
+
+.dz-tyt{text-align:center;font-size:15px;font-weight:600;padding:11px 0;
+  border-bottom:1px solid var(--ios-line);letter-spacing:-.01em;background:var(--surface);}
+
 /* czerwona linia „teraz" */
-.tl-now{position:absolute;left:40px;right:10px;height:2px;background:var(--ios-red);z-index:5;
+.tl-now{position:absolute;left:54px;right:10px;height:2px;background:var(--ios-red);z-index:9;
   pointer-events:none;}
-.tl-now:before{content:'';position:absolute;left:0;top:-4px;width:10px;height:10px;
-  border-radius:50%;background:var(--ios-red);}
+.tl-now b{position:absolute;left:-50px;top:-9px;background:var(--ios-red);color:#fff;
+  font-size:11px;font-weight:600;padding:2px 6px;border-radius:20px;line-height:1.4;
+  font-variant-numeric:tabular-nums;}
 
 /* nagłówek dni w widoku tygodnia */
 .tl-dni{display:grid;grid-template-columns:54px repeat(7,1fr);position:sticky;top:0;z-index:6;
@@ -194,6 +215,7 @@ body{background:var(--bg);color:var(--ink);
 .mc-kropki i.t-MOTO{background:var(--moto);}
 .mc-kropki i.t-MASAZ{background:var(--masaz);}
 
+.mc-info{text-align:center;color:var(--ios-grey);font-size:12.5px;padding:16px 10px 4px;}
 .mc-lista{border-top:8px solid #F2F2F7;margin-top:8px;}
 .mc-lista .tyt{font-size:12.5px;color:var(--ios-grey);padding:12px 16px 7px;font-weight:500;}
 .mc-row{display:flex;align-items:center;gap:11px;padding:11px 16px;
@@ -263,6 +285,52 @@ body{background:var(--bg);color:var(--ink);
 .mo-dots i.t-MOTO{background:var(--moto);}
 .mo-dots i.t-MASAZ{background:var(--masaz);}
 .mo-cell .c{font-size:11px;color:var(--muted);margin-top:5px;}
+
+/* baner kopii zapasowej */
+.baner{display:flex;align-items:center;gap:11px;background:#FFF8E6;border:1px solid #F0DFAE;
+  border-radius:var(--radius);padding:11px 14px;margin-bottom:12px;font-size:13.5px;color:#6B5518;}
+.baner span{flex:1;}
+.baner .btn{background:#6B5518;border-color:#6B5518;}
+.baner-x{border:0;background:transparent;color:#A08B4A;font-size:20px;cursor:pointer;
+  line-height:1;padding:0 4px;font-family:inherit;}
+
+/* ---------- PŁATNOŚCI ---------- */
+.kpi3{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;}
+.kpi .l{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:500;}
+.kpi .v{font-size:27px;font-weight:600;letter-spacing:-.03em;margin-top:3px;
+  font-variant-numeric:tabular-nums;}
+.kpi .s{font-size:12.5px;color:var(--muted);margin-top:1px;}
+.kpi.zle{background:var(--red-bg);border-color:var(--red-line);}
+.kpi.zle .v{color:var(--red);}
+
+.sek{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;margin-bottom:12px;}
+.sek-t{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);
+  font-weight:600;padding:13px 16px 10px;}
+.sek-pusto{padding:26px 16px;text-align:center;color:var(--muted);font-size:14px;}
+.sek-info{font-size:12.5px;color:var(--muted);padding:2px 4px 18px;line-height:1.5;}
+
+.dl{border-top:1px solid var(--line);}
+.dl-top{display:flex;align-items:center;gap:11px;padding:13px 16px;cursor:pointer;}
+.dl-top:active{background:var(--surface-2);}
+.dl-n{flex:1;min-width:0;font-size:15.5px;font-weight:600;letter-spacing:-.01em;}
+.dl-s{font-size:12.5px;color:var(--muted);font-weight:400;margin-top:1px;}
+.dl-k{font-size:16px;font-weight:600;color:var(--red);white-space:nowrap;
+  font-variant-numeric:tabular-nums;}
+.dl-x{color:var(--muted);font-size:13px;}
+.dl-body{padding:4px 16px 14px;background:var(--surface-2);}
+.dl-w{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);}
+.dl-w:last-of-type{border-bottom:0;}
+.dl-wd{flex:1;font-size:13.5px;color:var(--ink);font-variant-numeric:tabular-nums;}
+
+.wp{display:flex;align-items:center;gap:11px;padding:11px 16px;border-top:1px solid var(--line);}
+.wp-n{flex:1;min-width:0;font-size:15px;font-weight:500;}
+.wp-s{font-size:12.5px;color:var(--muted);font-weight:400;}
+.wp-d{font-size:12.5px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums;}
+.wp-k{font-size:15.5px;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;}
+.wp.suma{background:var(--surface-2);}
+.chip.dlug{background:var(--red-bg);color:var(--red);border:1px solid var(--red-line);font-weight:600;}
 
 /* ---------- MODAL ---------- */
 .ov{position:fixed;inset:0;background:rgba(22,24,29,.45);display:none;z-index:50;
@@ -387,6 +455,13 @@ body{background:var(--bg);color:var(--ink);
     box-shadow:0 -2px 14px rgba(22,24,29,.07);
   }
   .bar.top-bar .spacer{display:none;}
+  .seg-widok button{padding:7px 9px;font-size:12px;}
+  .kpi3{gap:8px;}
+  .kpi{padding:11px 13px;}
+  .kpi .v{font-size:22px;}
+  .dl-top{padding:12px 13px;}
+  .wp{padding:10px 13px;}
+  #kli-q{font-size:16px;}
   .bar.top-bar .seg{flex:1;}
   .bar.top-bar .seg button{flex:1;padding:11px 0;font-size:13.5px;}
   .fab{bottom:calc(74px + env(safe-area-inset-bottom,0px));width:50px;height:50px;font-size:25px;}
@@ -436,46 +511,96 @@ body{background:var(--bg);color:var(--ink);
 <div id="app" style="display:none;">
 <div class="wrap">
 
+  <!-- pasek sekcji — na telefonie przyklejony do dołu -->
   <div class="bar top-bar">
-    <div class="brand"><div class="mark">MU</div> Kalendarz</div>
+    <div class="brand"><div class="mark">MU</div> Move U</div>
     <div class="spacer"></div>
-    <div class="seg">
-      <button id="v-dzien"   onclick="setView('dzien')">Dzień</button>
-      <button id="v-tydzien" onclick="setView('tydzien')">Tydzień</button>
-      <button id="v-miesiac" onclick="setView('miesiac')">Miesiąc</button>
+    <div class="seg seg-sekcje">
+      <button id="s-kal"  onclick="setSekcja('kal')">Kalendarz</button>
+      <button id="s-plat" onclick="setSekcja('plat')">Płatności</button>
+      <button id="s-kli"  onclick="setSekcja('kli')">Klienci</button>
     </div>
   </div>
 
-  <div class="bar">
-    <div class="nav">
-      <button onclick="shift(-1)">‹</button>
-      <button class="today" onclick="goToday()">Dziś</button>
-      <button onclick="shift(1)">›</button>
-    </div>
-    <div class="period" id="period">—</div>
-    <div class="spacer"></div>
-    <div class="zoom">
-      <button onclick="zoomBy(-1)" title="Pomniejsz">−</button>
-      <span id="zoom-lbl">100%</span>
-      <button onclick="zoomBy(1)" title="Powiększ">+</button>
-    </div>
-    <span class="stan" id="stan"></span>
-    <button class="btn btn-ghost btn-sm hide-phone" onclick="openImport()">↓ Import</button>
-    <button class="btn btn-ghost btn-sm" onclick="openClients()">Klienci</button>
-    <button class="btn btn-sm hide-phone" onclick="openVisit(null)">+ Wizyta</button>
+  <!-- ========== KALENDARZ ========== -->
+  <div class="baner" id="baner-kopia" style="display:none;">
+    <span id="baner-txt"></span>
+    <button class="btn btn-sm" onclick="pobierzKopie()">Pobierz kopię</button>
+    <button class="baner-x" onclick="odlozKopie()" title="Przypomnij później">×</button>
   </div>
 
-  <div class="board" id="board"></div>
+  <div id="page-kal">
+    <div class="bar">
+      <div class="nav">
+        <button onclick="shift(-1)">‹</button>
+        <button class="today" onclick="goToday()">Dziś</button>
+        <button onclick="shift(1)">›</button>
+      </div>
+      <div class="period" id="period">—</div>
+      <div class="spacer"></div>
+      <div class="seg seg-widok">
+        <button id="v-dzien"   onclick="setView('dzien')">Dzień</button>
+        <button id="v-tydzien" onclick="setView('tydzien')">Tydzień</button>
+        <button id="v-miesiac" onclick="setView('miesiac')">Miesiąc</button>
+      </div>
+      <div class="zoom">
+        <button onclick="zoomBy(-1)" title="Pomniejsz">−</button>
+        <span id="zoom-lbl">100%</span>
+        <button onclick="zoomBy(1)" title="Powiększ">+</button>
+      </div>
+      <span class="stan" id="stan"></span>
+      <button class="btn btn-ghost btn-sm hide-phone" onclick="openImport()">↓ Import</button>
+      <button class="btn btn-sm hide-phone" onclick="openVisit(null)">+ Wizyta</button>
+    </div>
 
-  <div class="legend">
-    <span><i style="background:var(--tp)"></i> Trening personalny</span>
-    <span><i style="background:var(--fizjo)"></i> Fizjoterapia</span>
-    <span><i style="background:var(--moto)"></i> Motoryka</span>
-    <span><i style="background:var(--masaz)"></i> Masaż</span>
-    <span>↻ cykliczna</span>
-    <span><b class="pkt used">3/10</b> wykorzystana</span>
-    <span><b class="pkt plan">4/10</b> zaplanowana</span>
-    <span>✓ rozliczona</span>
+    <div class="board" id="board"></div>
+
+    <div class="legend">
+      <span><i style="background:var(--tp)"></i> Trening personalny</span>
+      <span><i style="background:var(--fizjo)"></i> Fizjoterapia</span>
+      <span><i style="background:var(--moto)"></i> Motoryka</span>
+      <span><i style="background:var(--masaz)"></i> Masaż</span>
+      <span>↻ cykliczna</span>
+      <span><b class="pkt used">3/10</b> wykorzystana</span>
+      <span><b class="pkt plan">4/10</b> zaplanowana</span>
+      <span>✓ rozliczona</span>
+    </div>
+  </div>
+
+  <!-- ========== PŁATNOŚCI ========== -->
+  <div id="page-plat" style="display:none;">
+    <div class="bar">
+      <div class="nav">
+        <button onclick="shiftMc(-1)">‹</button>
+        <button class="today" onclick="mcDzis()">Ten miesiąc</button>
+        <button onclick="shiftMc(1)">›</button>
+      </div>
+      <div class="period" id="plat-okres">—</div>
+      <div class="spacer"></div>
+      <span class="stan" id="stan2"></span>
+    </div>
+    <div id="plat"></div>
+  </div>
+
+  <!-- ========== KLIENCI ========== -->
+  <div id="page-kli" style="display:none;">
+    <div class="bar">
+      <input type="text" id="kli-q" oninput="renderKlienci()" placeholder="Szukaj osoby…"
+             style="flex:1;min-width:0;padding:9px 12px;border:1px solid var(--line);
+                    border-radius:10px;font-family:inherit;font-size:15px;">
+      <button class="btn btn-sm" onclick="addClient()">+ Nowy</button>
+    </div>
+    <div id="kli"></div>
+    <div class="sek" style="padding:14px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <span style="font-size:12.5px;color:var(--muted);flex:1;" id="kto"></span>
+      <button class="btn btn-ghost btn-sm" onclick="pobierzKopie()">💾 Pobierz kopię</button>
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('plik-kopia').click()">Wgraj kopię</button>
+      <input type="file" id="plik-kopia" accept=".json,application/json"
+             style="display:none;" onchange="wczytajKopie(this)">
+      <button class="btn btn-ghost btn-sm" onclick="openImport()">↓ Import z Google</button>
+      <button class="btn btn-ghost btn-sm" onclick="testBezpieczenstwa()">Test zabezpieczeń</button>
+      <button class="btn btn-ghost btn-sm btn-danger" onclick="wyloguj()">Wyloguj</button>
+    </div>
   </div>
 
 </div>
@@ -526,6 +651,17 @@ body{background:var(--bg);color:var(--ink);
 
     <div class="hint" id="f-rep-hint" style="margin-top:-6px;margin-bottom:12px;"></div>
 
+    <div class="fld" id="f-cena-wrap" style="display:none;">
+      <label>Cena tej wizyty</label>
+      <div style="display:flex;align-items:center;gap:9px;">
+        <input type="number" id="f-cena" min="0" step="5" style="flex:1;"
+               oninput="edytujeCene=true;cenaHint()">
+        <span style="font-size:15px;color:var(--muted);">zł</span>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="cenaZeStawki()">Stawka</button>
+      </div>
+      <div class="hint" id="f-cena-hint"></div>
+    </div>
+
     <div class="fld" id="f-paid-wrap" style="display:none;">
       <label>Rozliczenie</label>
       <div class="row2">
@@ -552,25 +688,6 @@ body{background:var(--bg);color:var(--ink);
     <div class="acts">
       <button class="btn btn-ghost" onclick="closeDay()">Zamknij</button>
       <button class="btn" onclick="addFromDay()">+ Wizyta</button>
-    </div>
-  </div>
-</div>
-
-<!-- ===== KLIENCI ===== -->
-<div class="ov" id="ov-clients" onclick="if(event.target===this)closeClients()">
-  <div class="modal">
-    <h3>Klienci</h3>
-    <div class="fld"><input type="text" id="cl-q" oninput="renderClientList()" placeholder="Szukaj…"></div>
-    <div id="cl-body" style="max-height:52vh;overflow-y:auto;"></div>
-    <div class="acts">
-      <button class="btn btn-ghost" onclick="closeClients()">Zamknij</button>
-      <button class="btn" onclick="addClient()">+ Nowy klient</button>
-    </div>
-    <div style="margin-top:14px;padding-top:13px;border-top:1px solid var(--line);
-                display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-      <span style="font-size:12px;color:var(--mut,#868C96);flex:1;" id="kto"></span>
-      <button class="lg-link" style="margin:0;" onclick="testBezpieczenstwa()">Test zabezpieczeń</button>
-      <button class="lg-link" style="margin:0;" onclick="wyloguj()">Wyloguj</button>
     </div>
   </div>
 </div>
@@ -941,6 +1058,7 @@ function started(ds,tm){
 }
 
 /* ---------- stan ---------- */
+let edytujeCene=false;
 let view='tydzien', cursor=new Date(), editId=null, formType='TP', formPaid=false, formPaidOn=null,
     dayModalDate=null, cardClientId=null, pktClientId=null;
 
@@ -1325,10 +1443,35 @@ function blokHtml(e, lewoProc, szerProc){
     '</div>';
 }
 
-function liniaTeraz(){
+function liniaTeraz(zGodzina){
   const t=new Date(), m=t.getHours()*60+t.getMinutes();
   if(m < H_FROM*60 || m > (H_TO+1)*60) return '';
-  return '<div class="tl-now" style="top:'+((m-H_FROM*60)/60*hpx())+'px;"></div>';
+  const gg=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+  return '<div class="tl-now" style="top:'+((m-H_FROM*60)/60*hpx())+'px;">'+
+         (zGodzina?'<b>'+gg+'</b>':'')+'</div>';
+}
+
+/* pasek z dniami tygodnia nad osią — szybkie przeskakiwanie */
+const DOW1=['P','W','Ś','C','P','S','N'];
+const DOWPELNE=['Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota','Niedziela'];
+function paskTygodnia(ds){
+  const m=mondayOf(parseYmd(ds)), t=todayYmd();
+  let h='<div class="ws">';
+  for(let i=0;i<7;i++){
+    const d=addDays(m,i), dd=ymd(d);
+    const ile=visitsOn(dd).length;
+    h+='<div class="ws-d'+(dd===ds?' wyb':'')+(dd===t?' dzis':'')+(i>=5?' wk':'')+'" '+
+       'onclick="idzDoDnia(\''+dd+'\')">'+
+       '<div class="ws-w">'+DOW1[i]+'</div>'+
+       '<div class="ws-n">'+d.getDate()+'</div>'+
+       '<div class="ws-kropka">'+(ile?'<i></i>':'')+'</div></div>';
+  }
+  return h+'</div>';
+}
+function idzDoDnia(ds){
+  cursor=parseYmd(ds);
+  if(view!=='dzien'){ ostatniSkok=''; setView('dzien'); }
+  else { ostatniSkok=''; render(); }
 }
 
 function tloGodzin(ds, kolumny){
@@ -1353,7 +1496,11 @@ function tloGodzin(ds, kolumny){
 function renderDay(){
   const ds=ymd(cursor), vs=visitsOn(ds);
   const h=hpx(), wysCal=(H_TO+1-H_FROM)*h+20;
-  let out='<div class="tl-wrap"><div class="tl"><div class="tl-bg" style="height:'+wysCal+'px;">';
+  const d=parseYmd(ds);
+  let out = paskTygodnia(ds) +
+    '<div class="dz-tyt">'+DOWPELNE[dowIdx(ds)]+' – '+d.getDate()+' '+
+      MONTHS[d.getMonth()].slice(0,3)+' '+d.getFullYear()+'</div>';
+  out+='<div class="tl-wrap"><div class="tl"><div class="tl-bg" style="height:'+wysCal+'px;">';
   out += tloGodzin(null, 1);
   out += '<div class="tl-area">';
   for(let g=H_FROM; g<=H_TO; g++){
@@ -1366,7 +1513,7 @@ function renderDay(){
     out += blokHtml(e, e.kol*szer, szer-1);
   });
   out += '</div>';
-  if(ds===todayYmd()) out += liniaTeraz();
+  if(ds===todayYmd()) out += liniaTeraz(true);
   document.getElementById('board').innerHTML = out+'</div></div></div>';
 }
 
@@ -1407,22 +1554,15 @@ function renderWeek(){
   document.getElementById('board').innerHTML =
     '<div class="tl-wrap">'+naglowek+'<div class="tl"><div class="tl-bg" style="height:'+wysCal+'px;">'+
     tloGodzin(null,7)+'<div class="tl-area">'+klik+kol+'</div>'+
-    (dzisWTyg?liniaTeraz():'')+'</div></div></div>';
+    (dzisWTyg?liniaTeraz(false):'')+'</div></div></div>';
 }
 
 /* ---------- MIESIĄC ---------- */
-let wybranyDzien=null;
-function wybierzDzien(ds){ wybranyDzien=ds; renderMonth(); }
-
 function renderMonth(){
   const y=cursor.getFullYear(), mo=cursor.getMonth();
   const first=mondayOf(new Date(y,mo,1)), last=new Date(y,mo+1,0);
   const cells=Math.ceil((Math.round((mondayOf(last)-first)/86400000)+7)/7)*7;
   const t=todayYmd();
-  if(!wybranyDzien || parseYmd(wybranyDzien).getMonth()!==mo ||
-     parseYmd(wybranyDzien).getFullYear()!==y){
-    wybranyDzien = (new Date(y,mo,1) <= new Date() && last >= new Date()) ? t : ymd(new Date(y,mo,1));
-  }
 
   let h='<div class="mc"><div class="mc-dow">'+
         ['Pn','Wt','Śr','Cz','Pt','So','Nd'].map(d=>'<div>'+d+'</div>').join('')+
@@ -1432,43 +1572,360 @@ function renderMonth(){
     const vs=visitsOn(ds);
     const kropki=[...new Set(vs.map(v=>v.type))].slice(0,4)
       .map(tp=>'<i class="t-'+tp+'"></i>').join('');
-    h+='<div class="mc-d'+(obok?' obok':'')+(ds===t?' dzis':'')+(ds===wybranyDzien?' wyb':'')+'" '+
-       'onclick="wybierzDzien(\''+ds+'\')">'+
+    h+='<div class="mc-d'+(obok?' obok':'')+(ds===t?' dzis':'')+'" '+
+       'onclick="idzDoDnia(\''+ds+'\')">'+
        '<div class="num">'+d.getDate()+'</div>'+
        '<div class="mc-kropki">'+kropki+'</div></div>';
   }
   h+='</div></div>';
-
-  /* lista wybranego dnia pod spodem */
-  const vs=visitsOn(wybranyDzien);
-  const dd=parseYmd(wybranyDzien);
-  h+='<div class="mc-lista"><div class="tyt">'+
-     DOW[dowIdx(wybranyDzien)]+', '+dd.getDate()+' '+MONTHS[dd.getMonth()]+
-     (vs.length?' · '+vs.length+' wizyt':'')+'</div>';
-  if(!vs.length){
-    h+='<div class="mc-pusto">Brak wizyt</div>';
-  } else {
-    h+=vs.map(v=>{
-      const c=clientById(v.clientId);
-      const pk=pktFor(v);
-      let dod='';
-      if(pk&&(pk.kind==='used'||pk.kind==='plan')) dod=' · '+pk.n+'/'+pk.size;
-      else if(pk&&pk.kind==='over') dod=' · poza pakietem';
-      else if(billingOf(v.clientId)==='wizyta'&&v.paid) dod=' · ✓ rozliczona';
-      return '<div class="mc-row" onclick="openVisit(\''+v.id+'\')">'+
-        '<span class="kropka t-'+v.type+'"></span>'+
-        '<div class="txt"><div class="nm">'+esc(c?c.name:'—')+'</div>'+
-        '<div class="sub">'+esc((TYPES.find(x=>x.k===v.type)||TYPES[0]).n)+
-        ' · '+(v.dur||60)+' min'+(v.seriesId?' · ↻':'')+dod+'</div></div>'+
-        '<span class="godz">'+esc(v.time||'')+'</span></div>';
-    }).join('');
-  }
-  h+='<div style="padding:13px 16px;"><button class="btn" style="width:100%;" '+
-     'onclick="addAt(\''+wybranyDzien+'\',10)">+ Dodaj wizytę tego dnia</button></div></div>';
+  h+='<div class="mc-info">Dotknij dnia, żeby zobaczyć godziny</div>';
 
   document.getElementById('board').innerHTML=h;
 }
 
+
+/* ============================================================
+   KOPIA ZAPASOWA
+   Plik z całością: klienci, wizyty, serie, pakiety.
+   Google Calendar przechowałby tylko nazwy i godziny — tu jest wszystko.
+   ============================================================ */
+function pobierzKopie(){
+  const dane = {
+    aplikacja:'Move U', wersja:1,
+    data:new Date().toISOString(),
+    kto:(uzytkownik&&uzytkownik.email)||'',
+    klienci:clients, wizyty:visits, serie:series, pakiety:packages
+  };
+  const txt = JSON.stringify(dane, null, 1);
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([txt], {type:'application/json'}));
+  a.download = 'moveu-kopia-'+todayYmd()+'.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+  try{ localStorage.setItem('moveu-ostatnia-kopia', todayYmd()); }catch(e){}
+  schowajBaner();
+  toast('Kopia pobrana: '+clients.length+' klientów, '+visits.length+' wizyt');
+}
+
+async function wczytajKopie(input){
+  const f = input.files && input.files[0];
+  input.value='';
+  if(!f) return;
+  let d;
+  try{ d = JSON.parse(await f.text()); }
+  catch(e){ toast('To nie jest plik kopii — nie dało się odczytać'); return; }
+  if(!d || !Array.isArray(d.klienci) || !Array.isArray(d.wizyty)){
+    toast('Plik nie wygląda na kopię Move U'); return;
+  }
+  const kl=d.klienci.length, wz=d.wizyty.length,
+        se=(d.serie||[]).length, pk=(d.pakiety||[]).length;
+
+  const r = await ask({
+    title:'Wgrać kopię z '+String(d.data||'').slice(0,10)+'?',
+    html:'W pliku: <b>'+kl+'</b> klientów, <b>'+wz+'</b> wizyt, <b>'+se+'</b> serii, <b>'+pk+'</b> pakietów.<br><br>'+
+         'Teraz w bazie: '+clients.length+' klientów, '+visits.length+' wizyt.<br><br>'+
+         '<b>Dopisz brakujące</b> — zostawia to, co masz, dokłada czego nie ma.<br>'+
+         '<b>Zastąp wszystko</b> — baza będzie dokładnie taka jak plik. Czego nie ma w pliku, zniknie.',
+    ok:'Dopisz brakujące', alt:'Zastąp wszystko', cancel:'Anuluj'
+  });
+  if(!r) return;
+
+  if(r.action==='alt'){
+    const p2 = await ask({title:'Na pewno zastąpić?',
+      html:'To skasuje z bazy wszystko, czego nie ma w pliku. Nie da się cofnąć.',
+      ok:'Tak, zastąp', cancel:'Anuluj', danger:true});
+    if(!p2) return;
+    clients=d.klienci; visits=d.wizyty; series=d.serie||[]; packages=d.pakiety||[];
+  } else {
+    const dod=(lokalne, zPliku)=>{
+      const sa=new Set(lokalne.map(x=>x.id));
+      let n=0;
+      (zPliku||[]).forEach(x=>{ if(!sa.has(x.id)){ lokalne.push(x); n++; } });
+      return n;
+    };
+    const n1=dod(clients,d.klienci), n2=dod(visits,d.wizyty),
+          n3=dod(series,d.serie),    n4=dod(packages,d.pakiety);
+    if(n1+n2+n3+n4===0){ toast('Nic nowego — wszystko z pliku już jest w bazie'); return; }
+  }
+
+  const ok1=await saveClients(), ok2=await saveVisits(),
+        ok3=await saveSeries(),  ok4=await savePackages();
+  render(); if(sekcja==='plat') renderPlatnosci(); if(sekcja==='kli') renderKlienci();
+  toast((ok1&&ok2&&ok3&&ok4)
+    ? 'Wgrano: '+clients.length+' klientów, '+visits.length+' wizyt'
+    : 'Część danych się nie zapisała — sprawdź połączenie');
+}
+
+/* przypomnienie w niedzielę albo po 7 dniach bez kopii */
+function sprawdzKopie(){
+  let ost=null;
+  try{ ost=localStorage.getItem('moveu-ostatnia-kopia');
+       if(localStorage.getItem('moveu-kopia-odlozona')===todayYmd()) return; }catch(e){}
+  const dni = ost ? Math.round((new Date()-parseYmd(ost))/86400000) : 999;
+  const niedziela = new Date().getDay()===0;
+  if(!(niedziela && dni>=1) && dni < 7) return;
+  if(!clients.length && !visits.length) return;
+  const el=document.getElementById('baner-kopia');
+  document.getElementById('baner-txt').textContent =
+    ost ? 'Ostatnia kopia '+dni+' dni temu ('+ost+'). Warto zrobić nową.'
+        : 'Nie masz jeszcze kopii zapasowej swoich danych.';
+  el.style.display='flex';
+}
+function schowajBaner(){ document.getElementById('baner-kopia').style.display='none'; }
+function odlozKopie(){
+  try{ localStorage.setItem('moveu-kopia-odlozona', todayYmd()); }catch(e){}
+  schowajBaner();
+}
+
+/* ============================================================
+   PŁATNOŚCI
+   Nie ma osobnej tabeli płatności. Wszystko liczy się z wizyt
+   i pakietów — dlatego nic nie może się rozjechać.
+   Zasada kasowa: przychód wpada w miesiąc DATY WPŁATY.
+   ============================================================ */
+const START_ROZLICZEN = '2026-10-01';   // wcześniejsze wizyty to tylko historia
+
+let mcCursor = new Date();              // miesiąc pokazywany we wpływach
+
+function zl(n){ return Math.round(+n||0).toLocaleString('pl-PL')+' zł'; }
+function mcKlucz(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
+function shiftMc(n){ mcCursor=new Date(mcCursor.getFullYear(),mcCursor.getMonth()+n,1); renderPlatnosci(); }
+function mcDzis(){ mcCursor=new Date(); renderPlatnosci(); }
+
+/* czy wizyta już się odbyła */
+function odbyta(v){ return started(v.date, v.time); }
+
+/* ile kosztuje wizyta: cena zapisana przy niej, inaczej stawka klienta */
+function cenaWizyty(v){
+  if(v.price!=null) return +v.price;
+  const c=clientById(v.clientId);
+  return (c && c.rate!=null) ? +c.rate : 0;
+}
+
+/* wszystkie wizyty (wpisane + wyliczone z serii) w zakresie dat */
+function wizytyOd(od, doo){
+  const out=[]; let d=parseYmd(od), guard=0;
+  while(ymd(d)<=doo && guard++<800){ out.push(...visitsOn(ymd(d))); d=addDays(d,1); }
+  return out;
+}
+
+/* ile klient jest winien — od startu rozliczeń do dziś */
+function dlugKlienta(cid){
+  const dzis=todayYmd();
+  const b=billingOf(cid);
+  const c=clientById(cid)||{};
+  const vs=wizytyOd(START_ROZLICZEN,dzis).filter(v=>v.clientId===cid && odbyta(v));
+
+  if(b==='pakiet'){
+    const niezaplacone=packages.filter(x=>x.clientId===cid && !x.paidOn);
+    const kwotaPk=niezaplacone.reduce((sum,x)=>
+      sum + (x.amount!=null ? +x.amount : (x.size||PKT_SIZE)*(+c.rate||0)), 0);
+    const poza=vs.filter(v=>{ const i=pktFor(v); return i && i.kind==='over'; });
+    return {kwota: kwotaPk + poza.reduce((su,v)=>su+cenaWizyty(v),0),
+            pakiety: niezaplacone, wizyty: poza, tryb:'pakiet'};
+  }
+  const nz=vs.filter(v=>!v.paid);
+  return {kwota: nz.reduce((su,v)=>su+cenaWizyty(v),0),
+          pakiety: [], wizyty: nz, tryb:b};
+}
+
+/* wpłaty w danym miesiącu — to jest przychód */
+function wplywyMc(mc){
+  const z=[];
+  packages.forEach(x=>{
+    if(x.paidOn && x.paidOn.startsWith(mc))
+      z.push({cid:x.clientId, kiedy:x.paidOn, ile:(x.amount!=null?+x.amount:0),
+              opis:'pakiet '+(x.size||PKT_SIZE)+' wejść'});
+  });
+  /* grupujemy wizyty tego samego klienta rozliczone tego samego dnia */
+  const grupy={};
+  visits.forEach(v=>{
+    if(!v.paid || !v.paidOn || !v.paidOn.startsWith(mc)) return;
+    const k=v.clientId+'|'+v.paidOn;
+    if(!grupy[k]) grupy[k]={cid:v.clientId, kiedy:v.paidOn, ile:0, n:0};
+    grupy[k].ile += cenaWizyty(v); grupy[k].n++;
+  });
+  Object.values(grupy).forEach(g=>{
+    z.push({cid:g.cid, kiedy:g.kiedy, ile:g.ile,
+            opis: g.n===1 ? '1 wizyta' : g.n+' wizyt'});
+  });
+  return z.sort((a,b)=>b.kiedy.localeCompare(a.kiedy));
+}
+
+/* oznaczenie wizyt jako zapłaconych — wirtualne najpierw usamodzielniamy */
+async function oznaczZaplacone(lista, kiedy){
+  let n=0;
+  for(const v of lista){
+    if(v.virtual){ const r=await materialize(v); r.paid=true; r.paidOn=kiedy; }
+    else { const r=visits.find(x=>x.id===v.id); if(r){ r.paid=true; r.paidOn=kiedy; } }
+    n++;
+  }
+  await saveVisits();
+  return n;
+}
+
+async function rozliczKlienta(cid){
+  const d=dlugKlienta(cid);
+  const c=clientById(cid);
+  if(!d.wizyty.length){ toast('Nic do rozliczenia'); return; }
+  const r=await ask({
+    title:'Rozliczyć '+(c?c.name:'')+'?',
+    html:'<b>'+d.wizyty.length+' wizyt</b> · <b>'+zl(d.kwota)+'</b><br><br>'+
+         'Data wpłaty decyduje, w którym miesiącu wpadnie przychód.',
+    ok:'Rozlicz', cancel:'Anuluj',
+    fields:[{name:'kiedy',label:'Data wpłaty',type:'date',value:todayYmd()}]
+  });
+  if(!r) return;
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(r.kiedy||'')){ toast('Podaj datę'); return; }
+  const n=await oznaczZaplacone(d.wizyty, r.kiedy);
+  renderPlatnosci(); render();
+  toast('Rozliczono '+n+' wizyt — '+zl(d.kwota));
+}
+
+/* pojedyncza wizyta: zapłacona / nie */
+async function przelaczWizyte(id){
+  const v=findVisit(id);
+  if(!v) return;
+  if(v.paid){
+    const r=visits.find(x=>x.id===id);
+    if(r){ r.paid=false; r.paidOn=null; await saveVisits(); }
+  } else {
+    await oznaczZaplacone([v], todayYmd());
+  }
+  renderPlatnosci(); render();
+}
+
+let rozwiniety=null;
+function rozwin(cid){ rozwiniety = (rozwiniety===cid? null : cid); renderPlatnosci(); }
+
+function renderPlatnosci(){
+  const mc=mcKlucz(mcCursor);
+  document.getElementById('plat-okres').textContent=
+    MONTHS[mcCursor.getMonth()]+' '+mcCursor.getFullYear();
+
+  const wpl=wplywyMc(mc);
+  const przychod=wpl.reduce((s,x)=>s+x.ile,0);
+
+  const dluznicy=clients.map(c=>({c, d:dlugKlienta(c.id)}))
+    .filter(x=>x.d.kwota>0 || x.d.wizyty.length>0 || x.d.pakiety.length>0)
+    .sort((a,b)=>b.d.kwota-a.d.kwota);
+  const doOdebrania=dluznicy.reduce((s,x)=>s+x.d.kwota,0);
+
+  let h='<div class="kpi3">'+
+    '<div class="kpi"><div class="l">Wpłynęło w '+MONTHS[mcCursor.getMonth()]+'</div>'+
+      '<div class="v">'+zl(przychod)+'</div><div class="s">'+wpl.length+' wpłat</div></div>'+
+    '<div class="kpi'+(doOdebrania>0?' zle':'')+'"><div class="l">Do odebrania</div>'+
+      '<div class="v">'+zl(doOdebrania)+'</div><div class="s">'+dluznicy.length+' osób</div></div>'+
+    '</div>';
+
+  /* ---- DO ROZLICZENIA ---- */
+  h+='<div class="sek"><div class="sek-t">Do rozliczenia</div>';
+  if(!dluznicy.length){
+    h+='<div class="sek-pusto">Wszystko rozliczone 👌</div>';
+  } else {
+    dluznicy.forEach(({c,d})=>{
+      const otwarty = rozwiniety===c.id;
+      h+='<div class="dl">'+
+        '<div class="dl-top" onclick="rozwin(\''+c.id+'\')">'+
+          '<div class="dl-n">'+esc(c.name)+
+            '<div class="dl-s">'+
+              (d.tryb==='pakiet'
+                ? (d.pakiety.length? d.pakiety.length+' niezapłacony pakiet':'')+
+                  (d.wizyty.length? (d.pakiety.length?' · ':'')+d.wizyty.length+' poza pakietem':'')
+                : d.wizyty.length+' wizyt · '+
+                  (d.tryb==='miesiac'?'rozliczenie miesięczne':'za wizytę'))+
+            '</div></div>'+
+          '<div class="dl-k">'+zl(d.kwota)+'</div>'+
+          '<span class="dl-x">'+(otwarty?'⌃':'⌄')+'</span>'+
+        '</div>';
+      if(otwarty){
+        h+='<div class="dl-body">';
+        d.pakiety.forEach(x=>{
+          h+='<div class="dl-w"><span class="dl-wd">pakiet '+(x.size||PKT_SIZE)+' wejść, od '+x.from+'</span>'+
+             '<button class="btn btn-ghost btn-sm" onclick="oplacPakiet(\''+x.id+'\')">Wpłata</button></div>';
+        });
+        d.wizyty.forEach(v=>{
+          h+='<div class="dl-w"><span class="dl-wd">'+v.date+' '+esc(v.time||'')+' · '+zl(cenaWizyty(v))+'</span>'+
+             '<button class="btn btn-ghost btn-sm" onclick="przelaczWizyte(\''+v.id+'\')">Zapłacona</button></div>';
+        });
+        if(d.wizyty.length>1)
+          h+='<div style="padding:9px 2px 2px;"><button class="btn" style="width:100%;" '+
+             'onclick="rozliczKlienta(\''+c.id+'\')">Rozlicz wszystkie — '+zl(d.kwota)+'</button></div>';
+        h+='</div>';
+      }
+      h+='</div>';
+    });
+  }
+  h+='</div>';
+
+  /* ---- WPŁYWY ---- */
+  h+='<div class="sek"><div class="sek-t">Wpłynęło — '+MONTHS[mcCursor.getMonth()]+' '+mcCursor.getFullYear()+'</div>';
+  if(!wpl.length){
+    h+='<div class="sek-pusto">Brak wpłat w tym miesiącu</div>';
+  } else {
+    wpl.forEach(x=>{
+      h+='<div class="wp"><div class="wp-n">'+esc(clientName(x.cid))+
+         '<div class="wp-s">'+esc(x.opis)+'</div></div>'+
+         '<div class="wp-d">'+x.kiedy+'</div>'+
+         '<div class="wp-k">'+zl(x.ile)+'</div></div>';
+    });
+    h+='<div class="wp suma"><div class="wp-n"><b>Razem</b></div><div class="wp-d"></div>'+
+       '<div class="wp-k"><b>'+zl(przychod)+'</b></div></div>';
+  }
+  h+='</div>';
+
+  h+='<div class="sek-info">Liczę od <b>'+START_ROZLICZEN+'</b>. '+
+     'Wcześniejsze wizyty zostają w kalendarzu jako historia, ale nie wchodzą do rozliczeń.</div>';
+
+  document.getElementById('plat').innerHTML=h;
+}
+
+/* ============================================================
+   KLIENCI — sekcja
+   ============================================================ */
+function renderKlienci(){
+  const q=normName((document.getElementById('kli-q')||{}).value||'');
+  const lista=clients.slice().filter(c=>!q||normName(c.name).includes(q))
+    .sort((a,b)=>a.name.localeCompare(b.name,'pl'));
+  const el=document.getElementById('kli');
+  if(!lista.length){ el.innerHTML='<div class="sek-pusto">Nic nie znaleziono.</div>'; return; }
+  el.innerHTML='<div class="sek">'+lista.map(c=>{
+    const b=c.billing||'wizyta';
+    const bl=(BILL.find(x=>x.k===b)||BILL[0]).n;
+    let chip='';
+    if(b==='pakiet'){
+      const i=PKT[c.id];
+      chip=(!i||i.brak)?'<span class="chip">brak pakietu</span>'
+                       :'<span class="chip pkt">'+i.used+'/'+i.cap+'</span>';
+    }
+    const ser=series.filter(x=>x.clientId===c.id&&!x.until);
+    const serTxt=ser.length?' · ↻ '+ser.map(x=>DOW[x.dow].toLowerCase()+' '+x.time).join(', '):'';
+    const stawka=c.rate?' · '+c.rate+' zł':' · <b style="color:var(--red)">brak stawki</b>';
+    const d=dlugKlienta(c.id);
+    const dlug=d.kwota>0?'<span class="chip dlug">'+zl(d.kwota)+'</span>':'';
+    return '<div class="crow" onclick="openClient(\''+c.id+'\')">'+
+      '<div class="cn">'+esc(c.name)+'<div class="cb">'+bl+stawka+serTxt+'</div></div>'+
+      dlug+chip+'<span style="color:var(--muted);font-size:16px;">›</span></div>';
+  }).join('')+'</div>';
+}
+
+/* ============================================================
+   SEKCJE
+   ============================================================ */
+let sekcja='kal';
+function setSekcja(k){
+  sekcja=k;
+  ['kal','plat','kli'].forEach(x=>{
+    document.getElementById('page-'+x).style.display = (x===k)?'block':'none';
+    document.getElementById('s-'+x).classList.toggle('on', x===k);
+  });
+  document.getElementById('fab').style.display = (k==='kal')?'block':'none';
+  try{ localStorage.setItem('moveu-cal-sekcja', k); }catch(e){}
+  if(k==='kal')  render();
+  if(k==='plat'){ rebuildPkt(); renderPlatnosci(); }
+  if(k==='kli'){  rebuildPkt(); renderKlienci(); }
+  window.scrollTo(0,0);
+}
 
 /* ---------- przeciąganie ---------- */
 let dragId=null;
@@ -1603,6 +2060,25 @@ function renderTypeTiles(){
     '<span class="sw" style="background:'+t.c+'"></span>'+t.n+'</button>').join('');
 }
 function setType(k){ formType=k; renderTypeTiles(); }
+/* Cena dotyczy TYLKO tej jednej wizyty. Stawka klienta zostaje nietknięta —
+   np. para płaci 200 zł, a ta sama osoba solo 150 zł. */
+function cenaHint(){
+  const c=currentClient();
+  const el=document.getElementById('f-cena-hint');
+  if(!c){ el.textContent=''; return; }
+  const v=document.getElementById('f-cena').value;
+  const st=(c.rate==null?null:+c.rate);
+  if(v==='' ){ el.textContent='Puste = '+(st!=null? st+' zł ze stawki' : 'brak stawki, 0 zł'); return; }
+  if(st!=null && +v!==st)
+    el.textContent='Inna niż stawka ('+st+' zł) — zmiana dotyczy tylko tej wizyty.';
+  else el.textContent='Zgodna ze stawką klienta.';
+}
+function cenaZeStawki(){
+  const c=currentClient();
+  document.getElementById('f-cena').value = (c&&c.rate!=null)? c.rate : '';
+  cenaHint();
+}
+
 function setPaid(b){
   formPaid=b;
   formPaidOn = b ? (formPaidOn||todayYmd()) : null;
@@ -1624,7 +2100,12 @@ function refreshBillingUI(){
   const c=currentClient();
   const info=document.getElementById('vm-info');
   const paidWrap=document.getElementById('f-paid-wrap');
-  if(!c){ info.innerHTML=''; paidWrap.style.display='none'; return; }
+  const cenaWrap=document.getElementById('f-cena-wrap');
+  if(!c){ info.innerHTML=''; paidWrap.style.display='none'; cenaWrap.style.display='none'; return; }
+  cenaWrap.style.display='block';
+  const pole=document.getElementById('f-cena');
+  if(pole.value==='' && !edytujeCene) pole.value = (c.rate==null?'':c.rate);
+  cenaHint();
   const b=c.billing||'wizyta';
   paidWrap.style.display = b==='wizyta' ? 'block' : 'none';
 
@@ -1656,6 +2137,8 @@ function openVisit(id){
   formType=v?v.type:'TP';
   renderTypeTiles();
   formPaidOn = v ? (v.paidOn||null) : null;
+  edytujeCene = false;
+  document.getElementById('f-cena').value = v ? (v.price==null?'':v.price) : '';
   setPaid(v?!!v.paid:false);
 
   clearClient();
@@ -1700,6 +2183,13 @@ function addAt(ds,hr){
   document.getElementById('f-time').value=String(hr).padStart(2,'0')+':00';
 }
 
+/* cena z pola; puste = stawka klienta */
+function cenaZPola(c){
+  const v=(document.getElementById('f-cena')||{}).value;
+  if(v!=='' && v!=null) return +v;
+  return (c && c.rate!=null) ? +c.rate : null;
+}
+
 async function saveVisit(){
   const c=currentClient();
   if(!c){
@@ -1724,7 +2214,7 @@ async function saveVisit(){
       if(s){ s.skips=(s.skips||[]).concat([stara.date]); await saveSeries(); }
       visits.push({id:uid(),clientId:c.id,date,time,dur,type:formType,paid:formPaid,
                    paidOn:formPaid?(formPaidOn||todayYmd()):null,
-                   price:(c.rate==null?null:c.rate),seriesId:null,fromSeries:stara.seriesId});
+                   price:cenaZPola(c),seriesId:null,fromSeries:stara.seriesId});
       await saveVisits(); closeVisit(); render(); checkPkt();
       toast('Zmieniono tylko tę wizytę — reszta serii bez zmian');
       return;
@@ -1734,7 +2224,7 @@ async function saveVisit(){
     }
     visits=visits.map(v=>v.id===editId?{...v,clientId:c.id,date,time,dur,type:formType,paid:formPaid,
       paidOn:formPaid?(v.paidOn||formPaidOn||todayYmd()):null,
-      price:(v.price!=null?v.price:(c.rate==null?null:c.rate))}:v);
+      price:cenaZPola(c)}:v);
     await saveVisits(); closeVisit(); render(); checkPkt(); toast('Zapisano');
     return;
   }
@@ -1758,7 +2248,7 @@ async function saveVisit(){
   }
   visits.push({id:uid(),clientId:c.id,date,time,dur,type:formType,paid:formPaid,
                paidOn:formPaid?(formPaidOn||todayYmd()):null,
-               price:(c.rate==null?null:c.rate),seriesId:null});
+               price:cenaZPola(c),seriesId:null});
   await saveVisits(); closeVisit(); render(); checkPkt(); toast(c.name+' — dodana');
 }
 
@@ -1797,14 +2287,66 @@ async function deleteVisit(){
   }
 
   /* ---- zwykła wizyta ---- */
-  const ok=await ask({
+  /* ile takich samych (ten klient, ten dzień tygodnia, ta godzina) jest DALEJ */
+  const kolejne = kolejneTakieSame(v);
+  const seriaPasuje = series.find(x=>x.clientId===v.clientId &&
+                                     x.dow===dowIdx(v.date) &&
+                                     (x.time||'')===(v.time||'') &&
+                                     (!x.until || x.until>v.date)) || null;
+  const ileSeria = seriaPasuje ? liczWSerii(seriaPasuje, v.date) : 0;
+  const ileRazem = kolejne.length + (ileSeria==='52+' ? 52 : (+ileSeria||0));
+
+  const r = await ask({
     title:'Usunąć wizytę?',
-    html:'<b>'+esc(clientName(v.clientId))+'</b><br>'+v.date+' o '+esc(v.time||''),
-    ok:'Usuń', danger:true
+    html:'<b>'+esc(clientName(v.clientId))+'</b><br>'+v.date+' o '+esc(v.time||'')+
+         (ileRazem ? '<br><br>Dalej w kalendarzu '+(ileRazem===1?'jest':'są')+' jeszcze <b>'+
+                     (ileSeria==='52+'?'52+':ileRazem)+'</b> '+odmianaWizyt(ileRazem)+
+                     ' (<b>'+DOWL[dowIdx(v.date)]+'</b>, godz. <b>'+esc(v.time||'')+'</b>).'
+                   : ''),
+    ok: ileRazem ? 'Tylko tę wizytę' : 'Usuń',
+    alt: ileRazem ? 'Tę i wszystkie kolejne' : null,
+    cancel:'Anuluj',
+    danger: !ileRazem
   });
-  if(!ok) return;
+  if(!r) return;
+
+  if(r.action==='alt'){
+    const doKasacji = new Set([editId, ...kolejne.map(x=>x.id)]);
+    visits = visits.filter(x=>!doKasacji.has(x.id));
+    await saveVisits();
+    if(seriaPasuje){
+      const wczoraj=ymd(addDays(parseYmd(v.date),-1));
+      if(wczoraj<seriaPasuje.from) series=series.filter(x=>x.id!==seriaPasuje.id);
+      else seriaPasuje.until=wczoraj;
+      await saveSeries();
+    }
+    closeVisit(); render(); checkPkt();
+    toast('Usunięto '+doKasacji.size+' wizyt'+(ileSeria?' i zatrzymano serię':''));
+    return;
+  }
+
   visits=visits.filter(x=>x.id!==editId); await saveVisits();
   closeVisit(); render(); checkPkt(); toast('Usunięto');
+}
+
+/* 1 taka wizyta / 2-4 takie wizyty / 5+ takich wizyt */
+function odmianaWizyt(n){
+  if(n===1) return 'taka wizyta';
+  const d=n%10, s=n%100;
+  if(d>=2 && d<=4 && !(s>=12 && s<=14)) return 'takie wizyty';
+  return 'takich wizyt';
+}
+
+/* wszystkie PRZYSZŁE pojedyncze wizyty tego samego klienta,
+   w ten sam dzień tygodnia i o tej samej godzinie */
+function kolejneTakieSame(v){
+  const dow=dowIdx(v.date), tm=(v.time||'');
+  return visits.filter(x=>
+    x.id!==v.id &&
+    x.clientId===v.clientId &&
+    x.date>v.date &&
+    (x.time||'')===tm &&
+    dowIdx(x.date)===dow);
 }
 
 /* ile wizyt z serii wypada po tej dacie — tylko do pokazania w pytaniu */
@@ -1838,32 +2380,8 @@ function addFromDay(){
 /* ============================================================
    KLIENCI
    ============================================================ */
-function openClients(){ document.getElementById('cl-q').value=''; renderClientList();
-  document.getElementById('ov-clients').classList.add('on'); odswiezBlokade(); }
-function closeClients(){ document.getElementById('ov-clients').classList.remove('on'); odswiezBlokade(); }
-
-function renderClientList(){
-  const q=normName(document.getElementById('cl-q').value);
-  const list=clients.slice().filter(c=>!q||normName(c.name).includes(q))
-    .sort((a,b)=>a.name.localeCompare(b.name,'pl'));
-  document.getElementById('cl-body').innerHTML = list.length ? list.map(c=>{
-    const b=c.billing||'wizyta';
-    const bl=(BILL.find(x=>x.k===b)||BILL[0]).n;
-    let chip='';
-    if(b==='pakiet'){
-      const i=PKT[c.id];
-      chip = (!i||i.brak) ? '<span class="chip">brak pakietu</span>'
-                          : '<span class="chip pkt">'+i.used+'/'+i.cap+'</span>';
-    }
-    const ser=series.filter(s=>s.clientId===c.id&&!s.until);
-    const serTxt=ser.length?' · ↻ '+ser.map(s=>DOW[s.dow].toLowerCase()+' '+s.time).join(', '):'';
-    const stawka = c.rate ? ' · '+c.rate+' zł'
-                          : ' · <b style="color:var(--red)">brak stawki</b>';
-    return '<div class="crow" onclick="openClient(\''+c.id+'\')">'+
-      '<div class="cn">'+c.name+'<div class="cb">'+bl+stawka+serTxt+'</div></div>'+chip+
-      '<span style="color:var(--muted);font-size:16px;">›</span></div>';
-  }).join('') : '<div class="empty">Nic nie znaleziono.</div>';
-}
+/* lista klientów jest teraz sekcją (renderKlienci), nie oknem */
+function renderClientList(){ if(sekcja==='kli') renderKlienci(); }
 
 async function addClient(){
   const r=await ask({title:'Nowa osoba', ok:'Dodaj',
@@ -1884,7 +2402,7 @@ async function addClient(){
     if(!ok) return;
   }
   const c={id:crypto.randomUUID(),name:nm,billing:'wizyta'};
-  clients.push(c); await saveClients(); renderClientList();
+  clients.push(c); await saveClients(); renderKlienci();
   openClient(c.id);
 }
 
@@ -1953,7 +2471,7 @@ function renderClientCard(){
     }).join('');
   }
   h+='</div><div class="acts" style="margin-top:4px;">'+
-     '<button class="btn btn-ghost" onclick="addPackage()">+ Pakiet 10 wejść</button></div>';
+     '<button class="btn btn-ghost" onclick="addPackage()">+ Nowy pakiet</button></div>';
   box.innerHTML=h;
 }
 async function setRate(val){
@@ -2042,10 +2560,9 @@ function checkPkt(){
 async function pktAdd(){
   const c=clientById(pktClientId);
   if(!c) return;
-  packages.push({id:crypto.randomUUID(),clientId:c.id,size:PKT_SIZE,from:todayYmd()});
-  await savePackages();
   document.getElementById('ov-pkt').classList.remove('on');
-  render(); toast(c.name+': nowy pakiet '+PKT_SIZE+' wejść');
+  cardClientId=c.id;
+  await addPackage();
 }
 async function pktLater(){
   const c=clientById(pktClientId);
@@ -2149,7 +2666,7 @@ function startKalendarz(){
   /* gest przesuwania palcem usunięty — łapał zwykłe przewijanie */
 
   document.addEventListener('keydown',e=>{
-    if(e.key==='Escape'){ closeVisit(); closeDay(); closeClients(); closeClient(); closeImport(); }
+    if(e.key==='Escape'){ closeVisit(); closeDay(); closeClient(); closeImport(); }
     if((e.ctrlKey||e.metaKey) && (e.key==='+'||e.key==='=')){ e.preventDefault(); zoomBy(1); }
     if((e.ctrlKey||e.metaKey) && e.key==='-'){ e.preventDefault(); zoomBy(-1); }
   });
@@ -2160,7 +2677,11 @@ function startKalendarz(){
   try{ zapisany=localStorage.getItem('moveu-cal-view'); }catch(e){}
   view = ['dzien','tydzien','miesiac'].includes(zapisany) ? zapisany : 'dzien';
   setView(view);
+  let sek=null;
+  try{ sek=localStorage.getItem('moveu-cal-sekcja'); }catch(e){}
+  setSekcja(['kal','plat','kli'].includes(sek)?sek:'kal');
   setTimeout(checkPkt,600);
+  setTimeout(sprawdzKopie,900);
 }
 
 /* ============================================================
