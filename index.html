@@ -324,6 +324,75 @@ body{background:var(--bg);color:var(--ink);
 .dl-body{padding:4px 16px 14px;background:var(--surface-2);}
 .dl-w{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);}
 .dl-w:last-of-type{border-bottom:0;}
+
+/* ===== STATYSTYKI ===== */
+.wyk{display:flex;align-items:flex-end;gap:5px;padding:12px 2px 2px;min-height:150px;}
+.wyk-k{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.wyk-s{width:100%;max-width:38px;height:112px;display:flex;flex-direction:column-reverse;
+  justify-content:flex-start;background:var(--surface-2);border-radius:6px;overflow:hidden;}
+.wyk-s i{display:block;width:100%;min-height:2px;}
+.wyk-v{font-size:11.5px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;
+  line-height:1;height:12px;}
+.wyk-e{font-size:10.5px;color:var(--muted);white-space:nowrap;}
+i.g-odb{background:var(--ink);}
+i.g-odw{background:var(--red);}
+i.g-prz{background:#D9A86C;}
+i.g-kasa{background:#2F6FA8;}
+i.g-nowi{background:#4E8B5A;}
+.legenda{display:flex;gap:14px;flex-wrap:wrap;padding:2px 0 0;font-size:12px;color:var(--muted);}
+.legenda span{display:flex;align-items:center;gap:5px;}
+.legenda i{width:10px;height:10px;border-radius:3px;display:block;}
+.pas{display:flex;align-items:center;gap:10px;padding:7px 0;}
+.pas-n{width:34%;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pas-t{flex:1;height:9px;background:var(--surface-2);border-radius:5px;overflow:hidden;}
+.pas-t i{display:block;height:100%;border-radius:5px;min-width:3px;}
+.pas-t i.t-TP{background:var(--tp);} .pas-t i.t-FIZJO{background:var(--fizjo);}
+.pas-t i.t-MOTO{background:var(--moto);} .pas-t i.t-MASAZ{background:var(--masaz);}
+.pas-v{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;min-width:52px;text-align:right;}
+.pas-v span{font-weight:400;color:var(--muted);font-size:11.5px;}
+.sek-lic{font-weight:400;color:var(--muted);}
+.mini4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:7px;padding:4px 0 2px;}
+.mini4 div{background:var(--surface-2);border-radius:9px;padding:9px 4px;text-align:center;}
+.mini4 b{display:block;font-size:19px;font-weight:600;letter-spacing:-.02em;}
+.mini4 span{display:block;font-size:10px;color:var(--muted);margin-top:1px;}
+@media(max-width:520px){
+  .wyk{gap:3px;} .wyk-e{font-size:9.5px;} .pas-n{width:40%;font-size:12.5px;}
+  .seg-sekcje button{padding:7px 9px;font-size:12px;}
+  .stan{display:none;}
+}
+.blad-linia{background:var(--red-bg);border:1px solid var(--red-line);color:var(--red);
+  border-radius:9px;padding:9px 12px;margin-bottom:10px;font-size:13.5px;font-weight:500;}
+.ask-chk{display:flex;align-items:center;gap:11px;padding:11px 13px;margin-bottom:8px;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:10px;
+  font-size:14.5px;cursor:pointer;}
+.ask-chk input{width:21px;height:21px;accent-color:var(--ink);margin:0;flex:none;}
+
+/* --- status wizyty --- */
+.st-wyb{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.st-wyb .tile{font-size:13.5px;}
+.tile.st-odw.on{background:var(--red-bg);border-color:var(--red-line);color:var(--red);}
+.tile.st-prz.on{background:#FFF7EA;border-color:#EADCC4;color:#8A6520;}
+.st-opis{font-size:12.5px;color:var(--muted);margin-top:7px;}
+/* ODWOŁANA — czerwona, żeby rzucała się w oczy z daleka */
+.tl-ev.odwolana,.ev.odwolana{
+  background:var(--red-bg)!important;border-left-color:var(--red)!important;
+  border-color:var(--red-line);opacity:1;}
+.tl-ev.odwolana .n,.ev.odwolana .nm{text-decoration:line-through;color:var(--red);}
+.tl-ev.odwolana .t,.ev.odwolana .mt{color:var(--red);opacity:.75;}
+.tl-ev.odwolana.minela,.ev.odwolana.minela{opacity:1;}
+/* PRZENIESIONA — bursztynowa */
+.tl-ev.przeniesiona,.ev.przeniesiona{
+  background:#FFF7EA!important;border-left-color:#C9922F!important;
+  border-color:#EADCC4;opacity:1;}
+.tl-ev.przeniesiona .n,.ev.przeniesiona .nm{color:#8A6520;}
+.tl-ev.przeniesiona .t,.ev.przeniesiona .mt{color:#8A6520;opacity:.75;}
+.tl-ev.przeniesiona.minela,.ev.przeniesiona.minela{opacity:1;}
+.st-znak{font-weight:700;margin-right:3px;}
+.tl-ev.odwolana .st-znak,.ev.odwolana .st-znak{color:var(--red);}
+.tl-ev.przeniesiona .st-znak,.ev.przeniesiona .st-znak{color:#C9922F;}
+/* kropka w widoku miesiąca */
+.mc-kropki i.st-odw{background:var(--red)!important;}
+
 .dl-wd{flex:1;font-size:13.5px;color:var(--ink);font-variant-numeric:tabular-nums;}
 .dl-wd.klik{cursor:pointer;-webkit-tap-highlight-color:transparent;}
 .dl-wd.klik:active{opacity:.5;}
@@ -527,6 +596,7 @@ body{background:var(--bg);color:var(--ink);
       <button id="s-kal"  onclick="setSekcja('kal')">Kalendarz</button>
       <button id="s-plat" onclick="setSekcja('plat')">Płatności</button>
       <button id="s-kli"  onclick="setSekcja('kli')">Klienci</button>
+      <button id="s-stat" onclick="setSekcja('stat')">Statystyki</button>
     </div>
   </div>
 
@@ -591,6 +661,17 @@ body{background:var(--bg);color:var(--ink);
   </div>
 
   <!-- ========== KLIENCI ========== -->
+  <div id="page-stat" style="display:none;">
+    <div class="bar">
+      <div class="seg" id="zakres-seg">
+        <button id="zak-6"  onclick="ustawZakres(6)">6 miesięcy</button>
+        <button id="zak-12" onclick="ustawZakres(12)">12 miesięcy</button>
+      </div>
+      <div class="spacer"></div>
+    </div>
+    <div id="stat"></div>
+  </div>
+
   <div id="page-kli" style="display:none;">
     <div class="bar">
       <input type="text" id="kli-q" oninput="renderKlienci()" placeholder="Szukaj osoby…"
@@ -667,6 +748,17 @@ body{background:var(--bg);color:var(--ink);
         <button type="button" class="btn btn-ghost btn-sm" onclick="cenaZeStawki()">Stawka</button>
       </div>
       <div class="hint" id="f-cena-hint"></div>
+    </div>
+
+    <div class="fld">
+      <label>Status wizyty</label>
+      <div class="st-wyb">
+        <button type="button" class="tile" id="st-auto" onclick="ustawStatus('')">Zaplanowana</button>
+        <button type="button" class="tile" id="st-odbyta" onclick="ustawStatus('odbyta')">✓ Odbyta</button>
+        <button type="button" class="tile st-odw" id="st-odwolana" onclick="ustawStatus('odwolana')">Odwołana</button>
+        <button type="button" class="tile st-prz" id="st-przeniesiona" onclick="ustawStatus('przeniesiona')">Przeniesiona</button>
+      </div>
+      <div class="st-opis" id="st-opis"></div>
     </div>
 
     <div class="fld" id="f-paid-wrap" style="display:none;">
@@ -813,6 +905,8 @@ const zBazy = {
   clients:  r => ({id:r.id, name:r.name, billing:r.billing||'wizyta', rate:r.rate, note:r.note}),
   visits:   r => ({id:r.id, clientId:r.client_id, date:r.date, time:g(r.time), dur:r.dur,
                    type:r.type, paid:!!r.paid, paidOn:r.paid_on, price:r.price,
+                   status:r.status||'', platna:(r.charge==null?null:!!r.charge),
+                   zuzywa:(r.uses_pkg==null?null:!!r.uses_pkg),
                    fromSeries:r.from_series, note:r.note}),
   series:   r => ({id:r.id, clientId:r.client_id, dow:r.dow, time:g(r.time), dur:r.dur,
                    type:r.type, from:r.from_date, until:r.until_date, skips:r.skips||[]}),
@@ -826,6 +920,9 @@ const doBazy = {
   visits:   o => ({id:o.id, client_id:o.clientId, date:o.date, time:o.time, dur:+o.dur||60,
                    type:o.type||'TP', paid:!!o.paid, paid_on:o.paidOn||null,
                    price:(o.price==null?null:+o.price),
+                   status:o.status||null,
+                   charge:(o.platna==null?null:!!o.platna),
+                   uses_pkg:(o.zuzywa==null?null:!!o.zuzywa),
                    from_series:o.fromSeries||null, note:o.note||null}),
   series:   o => ({id:o.id, client_id:o.clientId, dow:+o.dow, time:o.time, dur:+o.dur||60,
                    type:o.type||'TP', from_date:o.from, until_date:o.until||null,
@@ -1064,8 +1161,38 @@ function started(ds,tm){
   return d.getTime() <= Date.now();
 }
 
+/* ============================================================
+   STATUS WIZYTY
+   pusto        → apka liczy sama: po minięciu godziny = odbyta
+   'odbyta'     → potwierdzona ręcznie
+   'odwolana'   → odwołana   (platna / zuzywa ustawia user)
+   'przeniesiona' → przeniesiona (jw.)
+   ============================================================ */
+const STATUSY = {
+  plan:        {n:'Zaplanowana', k:'plan'},
+  odbyta:      {n:'Odbyta',      k:'odbyta'},
+  odwolana:    {n:'Odwołana',    k:'odwolana'},
+  przeniesiona:{n:'Przeniesiona',k:'przeniesiona'}
+};
+function statusWizyty(v){
+  if(!v) return 'plan';
+  if(v.status==='odwolana')     return 'odwolana';
+  if(v.status==='przeniesiona') return 'przeniesiona';
+  if(v.status==='odbyta')       return 'odbyta';
+  return started(v.date, v.time) ? 'odbyta' : 'plan';
+}
+function odwolanaLubPrzen(v){
+  const st=statusWizyty(v);
+  return st==='odwolana' || st==='przeniesiona';
+}
+/* czy wizyta ma zjeść wejście z pakietu */
+function liczyDoPakietu(v){
+  return odwolanaLubPrzen(v) ? !!v.zuzywa : true;
+}
+
 /* ---------- stan ---------- */
 let edytujeCene=false;
+let formStatus='', formPlatna=null, formZuzywa=null, formNowyTermin=null;
 let view='tydzien', cursor=new Date(), editId=null, formType='TP', formPaid=false, formPaidOn=null,
     dayModalDate=null, cardClientId=null, pktClientId=null;
 
@@ -1189,6 +1316,11 @@ function ask(o){
     document.getElementById('ask-title').textContent=o.title||'';
     let h=o.html?'<div class="note">'+o.html+'</div>':'';
     (o.fields||[]).forEach(f=>{
+      if(f.type==='check'){
+        h+='<label class="ask-chk"><input type="checkbox" id="ask-f-'+f.name+'"'+
+           (f.value?' checked':'')+'><span>'+esc(f.label)+'</span></label>';
+        return;
+      }
       h+='<div class="fld"><label>'+esc(f.label)+'</label>'+
          '<input type="'+(f.type||'text')+'" id="ask-f-'+f.name+'" '+
          'value="'+esc(f.value)+'"'+(f.min!=null?' min="'+f.min+'"':'')+'></div>';
@@ -1204,7 +1336,7 @@ function ask(o){
     if(o.alt){ alt.textContent=o.alt; alt.style.flex='1'; }
     document.getElementById('ov-ask').classList.add('on'); odswiezBlokade();
     setTimeout(()=>{
-      const i=document.querySelector('#ask-body input');
+      const i=document.querySelector('#ask-body input:not([type=checkbox])');
       if(i){ i.focus(); i.select(); } else yes.focus();
     },60);
   });
@@ -1213,7 +1345,7 @@ function askDone(co){
   const r=askResolve; askResolve=null;
   const vals={action: co===true?'ok':co};
   document.querySelectorAll('#ask-body input').forEach(i=>{
-    vals[i.id.replace('ask-f-','')]=i.value;
+    vals[i.id.replace('ask-f-','')] = (i.type==='checkbox') ? i.checked : i.value;
   });
   document.getElementById('ov-ask').classList.remove('on'); odswiezBlokade();
   if(r) r(co?vals:null);
@@ -1276,12 +1408,12 @@ function rebuildPkt(){
     let d=parseYmd(pkgs[0].from), guard=0;
     while(cnt<cap && guard++<900){
       const ds=ymd(d);
-      const dayVisits=visitsOn(ds).filter(v=>v.clientId===c.id);
+      const dayVisits=visitsOn(ds).filter(v=>v.clientId===c.id && liczyDoPakietu(v));
       for(let i=0;i<dayVisits.length && cnt<cap;i++){
         const v=dayVisits[i];
         if(inPkg>=(pkgs[idx].size||PKT_SIZE)){ idx++; inPkg=0; }
         cnt++; inPkg++;
-        const u=started(ds,v.time);
+        const u = odwolanaLubPrzen(v) ? true : started(ds,v.time);
         if(u) used++;
         map[ds+'|'+v.time]={n:inPkg,size:pkgs[idx].size||PKT_SIZE,used:u};
         lastDate=ds;
@@ -1384,9 +1516,13 @@ function evHtml(v){
   } else if(billingOf(v.clientId)==='wizyta' && v.paid){
     badge='<span class="paid" title="rozliczona">✓</span>';
   }
-  return '<div class="ev t-'+v.type+'" draggable="true" ondragstart="dragStart(event,\''+v.id+'\')" '+
+  const stw=statusWizyty(v);
+  const klw=(stw==='odwolana'||stw==='przeniesiona')?' '+stw:'';
+  const znakw = stw==='odwolana' ? '<span class="st-znak">✕</span>'
+              : stw==='przeniesiona' ? '<span class="st-znak">→</span>' : '';
+  return '<div class="ev t-'+v.type+klw+'" draggable="true" ondragstart="dragStart(event,\''+v.id+'\')" '+
          'onclick="event.stopPropagation();openVisit(\''+v.id+'\')">'+
-         '<div class="top"><span class="nm">'+(c?c.name:'—')+'</span>'+badge+'</div>'+
+         '<div class="top">'+znakw+'<span class="nm">'+(c?c.name:'—')+'</span>'+badge+'</div>'+
          '<div class="mt"><span>'+(v.time||'')+'</span>'+(v.dur?'<span>'+v.dur+'′</span>':'')+
          (v.seriesId?'<span class="rep">↻</span>':'')+'</div></div>';
 }
@@ -1441,12 +1577,16 @@ function blokHtml(e, lewoProc, szerProc){
   const minela = (v.date < todayYmd()) ||
                  (v.date===todayYmd() && e.do <= (new Date().getHours()*60+new Date().getMinutes()));
   const krotka = wys < 40;
-  return '<div class="tl-ev t-'+v.type+(krotka?' krotka':'')+(minela?' minela':'')+'" '+
+  const st = statusWizyty(v);
+  const kl = (st==='odwolana'||st==='przeniesiona') ? ' '+st : '';
+  const znak = st==='odwolana' ? '<span class="st-znak">✕</span>'
+             : st==='przeniesiona' ? '<span class="st-znak">→</span>' : '';
+  return '<div class="tl-ev t-'+v.type+(krotka?' krotka':'')+(minela?' minela':'')+kl+'" '+
     'data-id="'+esc(v.id)+'" '+
     'style="top:'+top+'px;height:'+wys+'px;left:'+lewoProc+'%;width:'+szerProc+'%;" '+
     'draggable="true" ondragstart="dragStart(event,\''+v.id+'\')" '+
     'onclick="event.stopPropagation();openVisit(\''+v.id+'\')">'+
-    '<div class="n">'+b+esc(c?c.name:'—')+'</div>'+
+    '<div class="n">'+znak+b+esc(c?c.name:'—')+'</div>'+
     (krotka?'':'<div class="t">'+esc(v.time||'')+' · '+(v.dur||60)+' min'+(v.seriesId?' ↻':'')+'</div>')+
     '</div>';
 }
@@ -1564,6 +1704,265 @@ function renderWeek(){
     tloGodzin(null,7)+'<div class="tl-area">'+klik+kol+'</div>'+
     (dzisWTyg?liniaTeraz(false):'')+'</div></div></div>';
 }
+
+
+/* ============================================================
+   STATYSTYKI
+   Wszystko liczone w locie z wizyt, serii, pakietów i wpłat.
+   Nic nie jest zapisywane — zmienisz wizytę, liczby same się poprawią.
+   ============================================================ */
+let statZakres=6, statRozwiniety=null;
+
+function ustawZakres(n){ statZakres=n; renderStat(); }
+
+/* lista kluczy miesięcy: ['2026-05', ... , biezacy] */
+function miesiaceWstecz(ile){
+  const out=[], d=new Date();
+  for(let i=ile-1;i>=0;i--){
+    const x=new Date(d.getFullYear(), d.getMonth()-i, 1);
+    out.push(mcKlucz(x));
+  }
+  return out;
+}
+function mcNazwaKrotka(mc){
+  const p=mc.split('-'); 
+  return MONTHS[(+p[1])-1].slice(0,3)+' '+p[0].slice(2);
+}
+
+/* wszystkie wizyty (wpisane + z serii) w danym miesiącu, bez przyszłości */
+function wizytyMiesiaca(mc){
+  const p=mc.split('-'), y=+p[0], m=+p[1];
+  const od=mc+'-01', ost=new Date(y, m, 0);
+  const doo=ymd(ost);
+  return wizytyOd(od, doo);
+}
+
+/* ---------- podstawowe liczby jednego miesiąca ---------- */
+function statMiesiaca(mc){
+  const vs=wizytyMiesiaca(mc);
+  let odbyte=0, odwolane=0, przeniesione=0, plan=0;
+  const rodzaje={};
+  vs.forEach(v=>{
+    const st=statusWizyty(v);
+    if(st==='odwolana') odwolane++;
+    else if(st==='przeniesiona') przeniesione++;
+    else if(st==='odbyta'){ odbyte++; rodzaje[v.type]=(rodzaje[v.type]||0)+1; }
+    else plan++;
+  });
+  return {mc, odbyte, odwolane, przeniesione, plan, rodzaje,
+          wszystkie:odbyte+odwolane+przeniesione,
+          przychod: wplywyMc(mc).reduce((a,x)=>a+x.ile,0),
+          nowi: noweOsobyMc(mc).length};
+}
+
+/* kiedy klient był u Ciebie pierwszy raz — po wizytach, nie po dacie dodania */
+let _pierwszaWizyta=null;
+function przeliczPierwszeWizyty(){
+  _pierwszaWizyta={};
+  const wszystkie=[...visits];
+  series.forEach(s=>wszystkie.push({clientId:s.clientId, date:s.from}));
+  wszystkie.forEach(v=>{
+    const st = v.status!==undefined ? statusWizyty(v) : 'odbyta';
+    if(st==='odwolana') return;               /* odwołana nie czyni z kogoś klienta */
+    const b=_pierwszaWizyta[v.clientId];
+    if(!b || v.date<b) _pierwszaWizyta[v.clientId]=v.date;
+  });
+}
+function noweOsobyMc(mc){
+  if(!_pierwszaWizyta) przeliczPierwszeWizyty();
+  return clients.filter(c=>{
+    const d=_pierwszaWizyta[c.id];
+    return d && d.startsWith(mc);
+  });
+}
+
+/* ---------- liczby per klient w zakresie ---------- */
+function statKlientow(mcList){
+  const od=mcList[0]+'-01';
+  const ost=mcList[mcList.length-1].split('-');
+  const doo=ymd(new Date(+ost[0], +ost[1], 0));
+  const vs=wizytyOd(od, doo);
+  const mapa={};
+  clients.forEach(c=>mapa[c.id]={c, odbyte:0, odwolane:0, przeniesione:0, plan:0, ostatnia:null});
+  vs.forEach(v=>{
+    const m=mapa[v.clientId]; if(!m) return;
+    const st=statusWizyty(v);
+    if(st==='odbyta'){ m.odbyte++; if(!m.ostatnia||v.date>m.ostatnia) m.ostatnia=v.date; }
+    else if(st==='odwolana') m.odwolane++;
+    else if(st==='przeniesiona') m.przeniesione++;
+    else m.plan++;
+  });
+  return Object.values(mapa)
+    .filter(x=>x.odbyte||x.odwolane||x.przeniesione||x.plan)
+    .sort((a,b)=>b.odbyte-a.odbyte || a.c.name.localeCompare(b.c.name,'pl'));
+}
+
+/* ---------- rysowanie słupków ---------- */
+function slupki(dane, opcje){
+  const max=Math.max(1, ...dane.map(d=>d.suma!=null?d.suma:d.v));
+  const o=opcje||{};
+  let h='<div class="wyk">';
+  dane.forEach(d=>{
+    h+='<div class="wyk-k" title="'+esc(d.etykieta+': '+(d.opis||d.v))+'">'+
+       '<div class="wyk-s">';
+    if(d.czesci){
+      d.czesci.forEach(cz=>{
+        if(!cz.v) return;
+        h+='<i class="'+cz.kl+'" style="height:'+(cz.v/max*100)+'%;" title="'+esc(cz.n+': '+cz.v)+'"></i>';
+      });
+    } else {
+      h+='<i class="'+(o.kl||'g1')+'" style="height:'+(d.v/max*100)+'%;"></i>';
+    }
+    h+='</div><div class="wyk-v">'+(d.pokaz!=null?d.pokaz:(d.v||''))+'</div>'+
+       '<div class="wyk-e">'+esc(d.etykieta)+'</div></div>';
+  });
+  return h+'</div>';
+}
+
+function renderStat(){
+  _pierwszaWizyta=null;
+  document.getElementById('zak-6').classList.toggle('on', statZakres===6);
+  document.getElementById('zak-12').classList.toggle('on', statZakres===12);
+
+  const mcList=miesiaceWstecz(statZakres);
+  const dane=mcList.map(statMiesiaca);
+  const biez=dane[dane.length-1];
+  const poprz=dane.length>1?dane[dane.length-2]:null;
+
+  const sumaOdb=dane.reduce((a,d)=>a+d.odbyte,0);
+  const sumaOdw=dane.reduce((a,d)=>a+d.odwolane,0);
+  const sumaPrz=dane.reduce((a,d)=>a+d.przeniesione,0);
+  const sumaPrzych=dane.reduce((a,d)=>a+d.przychod,0);
+  const procOdw = (sumaOdb+sumaOdw+sumaPrz) ? Math.round(sumaOdw/(sumaOdb+sumaOdw+sumaPrz)*100) : 0;
+
+  let h='';
+
+  /* ---- KPI ---- */
+  const zmiana = poprz && poprz.przychod ?
+    Math.round((biez.przychod-poprz.przychod)/poprz.przychod*100) : null;
+  h+='<div class="kpi3">'+
+     '<div class="kpi"><div class="l">Odbyte wizyty</div><div class="v">'+sumaOdb+'</div>'+
+       '<div class="s">przez '+statZakres+' mies.</div></div>'+
+     '<div class="kpi'+(procOdw>15?' zle':'')+'"><div class="l">Odwołania</div>'+
+       '<div class="v">'+procOdw+'%</div><div class="s">'+sumaOdw+' odwołanych'+
+       (sumaPrz?' · '+sumaPrz+' przeniesionych':'')+'</div></div>'+
+     '</div>';
+  h+='<div class="kpi3">'+
+     '<div class="kpi"><div class="l">Wpłaty razem</div><div class="v">'+zl(sumaPrzych)+'</div>'+
+       '<div class="s">'+statZakres+' mies.</div></div>'+
+     '<div class="kpi"><div class="l">'+MONTHS[new Date().getMonth()]+'</div>'+
+       '<div class="v">'+zl(biez.przychod)+'</div>'+
+       '<div class="s">'+(zmiana===null?'brak porównania':
+          (zmiana>=0?'▲ +':'▼ ')+zmiana+'% vs poprz.')+'</div></div>'+
+     '</div>';
+
+  /* ---- WIZYTY PO MIESIĄCACH ---- */
+  h+='<div class="sek"><div class="sek-t">Wizyty w miesiącach</div>'+
+     '<div class="legenda">'+
+       '<span><i class="g-odb"></i>odbyte</span>'+
+       '<span><i class="g-odw"></i>odwołane</span>'+
+       '<span><i class="g-prz"></i>przeniesione</span>'+
+     '</div>'+
+     slupki(dane.map(d=>({etykieta:mcNazwaKrotka(d.mc), suma:d.wszystkie,
+       pokaz:d.wszystkie||'', opis:d.odbyte+' odbyte, '+d.odwolane+' odwołane',
+       czesci:[{kl:'g-odb',n:'odbyte',v:d.odbyte},
+               {kl:'g-odw',n:'odwołane',v:d.odwolane},
+               {kl:'g-prz',n:'przeniesione',v:d.przeniesione}]})))+
+     '</div>';
+
+  /* ---- PRZYCHÓD ---- */
+  h+='<div class="sek"><div class="sek-t">Wpłaty w miesiącach</div>'+
+     slupki(dane.map(d=>({etykieta:mcNazwaKrotka(d.mc), v:d.przychod,
+       pokaz: !d.przychod ? '' :
+         (d.przychod>=10000 ? Math.round(d.przychod/1000)+'k' : d.przychod)})), {kl:'g-kasa'})+
+     '<div class="sek-info">Liczy się <b>data wpłaty</b>, nie data wizyty.</div>'+
+     '</div>';
+
+  /* ---- NOWE OSOBY ---- */
+  h+='<div class="sek"><div class="sek-t">Nowe osoby w miesiącu</div>'+
+     slupki(dane.map(d=>({etykieta:mcNazwaKrotka(d.mc), v:d.nowi, pokaz:d.nowi||''})),
+            {kl:'g-nowi'})+
+     '<div class="sek-info">Licząc po <b>pierwszej wizycie</b> w kalendarzu.</div>'+
+     '</div>';
+
+  /* ---- RODZAJE ---- */
+  const rodz={};
+  dane.forEach(d=>Object.keys(d.rodzaje).forEach(k=>rodz[k]=(rodz[k]||0)+d.rodzaje[k]));
+  const sumaR=Object.values(rodz).reduce((a,b)=>a+b,0);
+  h+='<div class="sek"><div class="sek-t">Co robisz najczęściej</div>';
+  if(!sumaR){ h+='<div class="sek-pusto">Brak odbytych wizyt w tym zakresie</div>'; }
+  else {
+    TYPES.forEach(t=>{
+      const n=rodz[t.k]||0; if(!n) return;
+      const pr=Math.round(n/sumaR*100);
+      h+='<div class="pas"><div class="pas-n">'+esc(t.n)+'</div>'+
+         '<div class="pas-t"><i class="t-'+t.k+'" style="width:'+pr+'%;"></i></div>'+
+         '<div class="pas-v">'+n+' <span>'+pr+'%</span></div></div>';
+    });
+  }
+  h+='</div>';
+
+  /* ---- KLIENCI ---- */
+  const kl=statKlientow(mcList);
+  const dzis=todayYmd();
+  const znikli=kl.filter(x=>x.ostatnia && !x.plan &&
+      Math.round((parseYmd(dzis)-parseYmd(x.ostatnia))/86400000)>=21);
+
+  h+='<div class="sek"><div class="sek-t">Najaktywniejsi</div>';
+  if(!kl.length){ h+='<div class="sek-pusto">Brak danych</div>'; }
+  else kl.slice(0,8).forEach(x=>{
+    const mx=kl[0].odbyte||1;
+    h+='<div class="pas"><div class="pas-n">'+esc(x.c.name)+'</div>'+
+       '<div class="pas-t"><i class="t-TP" style="width:'+(x.odbyte/mx*100)+'%;"></i></div>'+
+       '<div class="pas-v">'+x.odbyte+'</div></div>';
+  });
+  h+='</div>';
+
+  h+='<div class="sek"><div class="sek-t">Dawno nie było <span class="sek-lic">'+znikli.length+'</span></div>';
+  if(!znikli.length){ h+='<div class="sek-pusto">Wszyscy aktywni 👌</div>'; }
+  else znikli.sort((a,b)=>a.ostatnia.localeCompare(b.ostatnia)).forEach(x=>{
+    const dni=Math.round((parseYmd(dzis)-parseYmd(x.ostatnia))/86400000);
+    h+='<div class="wp"><div class="wp-n">'+esc(x.c.name)+
+       '<div class="wp-s">ostatnio '+x.ostatnia+'</div></div>'+
+       '<div class="wp-k" style="color:var(--red);">'+dni+' dni</div></div>';
+  });
+  h+='</div>';
+
+  /* ---- ROZWIJANA LISTA WSZYSTKICH ---- */
+  h+='<div class="sek"><div class="sek-t">Każdy klient <span class="sek-lic">'+kl.length+'</span></div>';
+  if(!kl.length){ h+='<div class="sek-pusto">Brak danych</div>'; }
+  else kl.forEach(x=>{
+    const ot=statRozwiniety===x.c.id;
+    h+='<div class="dl">'+
+       '<div class="dl-top" onclick="rozwinStat(\''+x.c.id+'\')">'+
+         '<div class="dl-n">'+esc(x.c.name)+
+           '<div class="dl-s">'+x.odbyte+' odbyt'+(x.odbyte===1?'a':'ych')+
+           (x.odwolane?' · '+x.odwolane+' odwołan'+(x.odwolane===1?'a':'e'):'')+'</div></div>'+
+         '<span class="dl-x">'+(ot?'⌃':'⌄')+'</span>'+
+       '</div>';
+    if(ot){
+      h+='<div class="dl-body"><div class="mini4">'+
+         '<div><b>'+x.odbyte+'</b><span>odbyte</span></div>'+
+         '<div><b>'+x.odwolane+'</b><span>odwołane</span></div>'+
+         '<div><b>'+x.przeniesione+'</b><span>przeniesione</span></div>'+
+         '<div><b>'+x.plan+'</b><span>zaplanowane</span></div>'+
+         '</div>'+
+         '<div class="sek-info" style="padding:9px 0 0;">'+
+           (x.ostatnia?'Ostatnia odbyta: <b>'+x.ostatnia+'</b>':'Brak odbytych wizyt')+
+           ' · rozliczenie: <b>'+(BILL.find(b=>b.k===billingOf(x.c.id))||{n:'za wizytę'}).n+'</b>'+
+         '</div></div>';
+    }
+    h+='</div>';
+  });
+  h+='</div>';
+
+  h+='<div class="sek-info">Wizyta bez ustawionego statusu liczy się jako <b>odbyta</b>, '+
+     'gdy minie jej godzina. Odwołane i przeniesione wchodzą do rozliczeń tylko wtedy, '+
+     'gdy zaznaczysz „klient i tak płaci".</div>';
+
+  document.getElementById('stat').innerHTML=h;
+}
+function rozwinStat(cid){ statRozwiniety = (statRozwiniety===cid?null:cid); renderStat(); }
 
 /* ---------- skok z Płatności prosto do wizyty w kalendarzu ---------- */
 function skoczDoWizyty(id, ds){
@@ -1715,8 +2114,12 @@ function mcKlucz(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(
 function shiftMc(n){ mcCursor=new Date(mcCursor.getFullYear(),mcCursor.getMonth()+n,1); renderPlatnosci(); }
 function mcDzis(){ mcCursor=new Date(); renderPlatnosci(); }
 
-/* czy wizyta już się odbyła */
-function odbyta(v){ return started(v.date, v.time); }
+/* czy wizyta liczy się do PIENIĘDZY
+   – odwołana/przeniesiona wchodzi tylko wtedy, gdy zaznaczyłeś „płatna" */
+function odbyta(v){
+  if(odwolanaLubPrzen(v)) return !!v.platna;
+  return statusWizyty(v)==='odbyta';
+}
 
 /* ile kosztuje wizyta: cena zapisana przy niej, inaczej stawka klienta */
 function cenaWizyty(v){
@@ -1982,7 +2385,7 @@ function renderKlienci(){
 let sekcja='kal';
 function setSekcja(k){
   sekcja=k;
-  ['kal','plat','kli'].forEach(x=>{
+  ['kal','plat','kli','stat'].forEach(x=>{
     document.getElementById('page-'+x).style.display = (x===k)?'block':'none';
     document.getElementById('s-'+x).classList.toggle('on', x===k);
   });
@@ -1991,6 +2394,7 @@ function setSekcja(k){
   if(k==='kal')  render();
   if(k==='plat'){ rebuildPkt(); renderPlatnosci(); }
   if(k==='kli'){  rebuildPkt(); renderKlienci(); }
+  if(k==='stat'){ rebuildPkt(); renderStat(); }
   window.scrollTo(0,0);
 }
 
@@ -2163,6 +2567,99 @@ function updateRepHint(){
 }
 
 /* pokazuje sposób rozliczenia wybranego klienta */
+/* kliknięcie w status. Odwołana/przeniesiona pyta o pieniądze i pakiet. */
+async function ustawStatus(st){
+  if(st!=='odwolana' && st!=='przeniesiona'){
+    formStatus=st; formPlatna=null; formZuzywa=null; formNowyTermin=null;
+    rysujStatus(); return;
+  }
+  const c=currentClient();
+  if(st==='przeniesiona' && !c){ toast('Najpierw wybierz klienta'); return; }
+  const pakiet = c && billingOf(c.id)==='pakiet';
+  const nazwa = st==='odwolana' ? 'Odwołana wizyta' : 'Przeniesiona wizyta';
+  const juzOplacona = formPaid;
+  const staraD = document.getElementById('f-date').value || todayYmd();
+  const staraG = document.getElementById('f-time').value || '17:00';
+
+  /* wartości, które widzi user — po błędzie wracają takie, jakie wpisał */
+  let wD = (formStatus==='przeniesiona' && formNowyTermin) ? formNowyTermin.date
+         : ymd(addDays(parseYmd(staraD),7));
+  let wG = (formStatus==='przeniesiona' && formNowyTermin) ? formNowyTermin.time : staraG;
+  let wPlatna = formStatus===st ? !!formPlatna : juzOplacona;
+  let wZuzywa = formStatus===st ? !!formZuzywa : false;
+  let blad='';
+
+  for(let proba=0; proba<12; proba++){
+    const pola=[];
+    if(st==='przeniesiona'){
+      pola.push({name:'nd', type:'date', label:'Nowy termin — data',    value:wD});
+      pola.push({name:'ng', type:'time', label:'Nowy termin — godzina', value:wG});
+    }
+    pola.push({name:'platna', type:'check', label:'Klient i tak płaci za tę wizytę', value:wPlatna});
+    if(pakiet) pola.push({name:'zuzywa', type:'check', label:'Zjada wejście z pakietu', value:wZuzywa});
+
+    const r=await ask({
+      title:nazwa,
+      html:(blad?'<div class="blad-linia">'+esc(blad)+'</div>':'')+
+           (c?'<b>'+esc(c.name)+'</b><br>':'')+
+           (st==='przeniesiona'
+             ? 'Podaj, na kiedy przenosisz — nowa wizyta pojawi się w kalendarzu sama. '+
+               'Stary termin zostanie oznaczony na bursztynowo.'
+             : 'Zaznacz, co ma się policzyć. Nic nie zaznaczone = wizyta nie wchodzi ani do rozliczeń, ani do pakietu.')+
+           (juzOplacona
+             ? '<br><br><b>Uwaga:</b> ta wizyta jest już oznaczona jako rozliczona. '+
+               'Jeśli odznaczysz „klient i tak płaci", zdejmę też wpłatę — '+
+               'inaczej kwota zostałaby w przychodzie miesiąca.'
+             : ''),
+      fields:pola, ok:'Zapisz status', cancel:'Anuluj'
+    });
+    if(!r) return;                       /* Anuluj — nic nie zmieniamy */
+
+    wPlatna=!!r.platna; wZuzywa=pakiet?!!r.zuzywa:false;
+
+    if(st==='przeniesiona'){
+      wD=String(r.nd||''); wG=String(r.ng||'');
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(wD)){ blad='Podaj datę nowego terminu.'; continue; }
+      if(!/^\d{2}:\d{2}$/.test(wG)){ blad='Podaj godzinę nowego terminu.'; continue; }
+      if(wD===staraD && wG===staraG){ blad='Nowy termin musi być inny niż stary.'; continue; }
+      if(visitsOn(wD).some(v=>v.clientId===c.id && v.time===wG && v.id!==editId)){
+        blad=c.name+' ma już wizytę '+wD+' o '+wG+'. Wybierz inną godzinę.'; continue;
+      }
+      formNowyTermin={date:wD, time:wG};
+    } else {
+      formNowyTermin=null;
+    }
+
+    formStatus=st; formPlatna=wPlatna; formZuzywa=wZuzywa;
+    if(!formPlatna && formPaid) setPaid(false);
+    rysujStatus();
+    return;
+  }
+}
+function rysujStatus(){
+  const mapa={'':'st-auto','odbyta':'st-odbyta','odwolana':'st-odwolana','przeniesiona':'st-przeniesiona'};
+  Object.keys(mapa).forEach(k=>{
+    const el=document.getElementById(mapa[k]);
+    if(el) el.classList.toggle('on', formStatus===k);
+  });
+  const el=document.getElementById('st-opis');
+  if(!el) return;
+  if(formStatus==='odwolana' || formStatus==='przeniesiona'){
+    const cz=[];
+    cz.push(formPlatna ? 'klient płaci' : 'bez opłaty');
+    const c=currentClient();
+    if(c && billingOf(c.id)==='pakiet') cz.push(formZuzywa ? 'zjada wejście' : 'nie zjada wejścia');
+    const gdzie = (formStatus==='przeniesiona' && formNowyTermin)
+      ? ' na <b>'+formNowyTermin.date+' '+formNowyTermin.time+'</b>' : '';
+    el.innerHTML='<b>'+(formStatus==='odwolana'?'Odwołana':'Przeniesiona')+'</b>'+gdzie+' — '+cz.join(' · ')+
+                 '. <a href="#" onclick="event.preventDefault();ustawStatus(\''+formStatus+'\')">zmień</a>';
+  } else if(formStatus==='odbyta'){
+    el.textContent='Potwierdzona ręcznie — liczy się do rozliczeń niezależnie od godziny.';
+  } else {
+    el.textContent='Apka sama uzna ją za odbytą, kiedy minie godzina wizyty.';
+  }
+}
+
 function refreshBillingUI(){
   const c=currentClient();
   const info=document.getElementById('vm-info');
@@ -2202,6 +2699,10 @@ function openVisit(id){
   document.getElementById('vm-del').style.display = v?'flex':'none';
 
   formType=v?v.type:'TP';
+  formStatus = v ? (v.status||'') : '';
+  formPlatna = v ? (v.platna==null?null:!!v.platna) : null;
+  formZuzywa = v ? (v.zuzywa==null?null:!!v.zuzywa) : null;
+  formNowyTermin = null;
   renderTypeTiles();
   formPaidOn = v ? (v.paidOn||null) : null;
   edytujeCene = false;
@@ -2226,6 +2727,7 @@ function openVisit(id){
   } else if(v){ document.getElementById('f-rep-hint').textContent=''; }
 
   refreshBillingUI();
+  rysujStatus();
   /* przy edycji dopisz, która to wizyta w pakiecie */
   if(v){
     const p=pktFor(v);
@@ -2257,6 +2759,19 @@ function cenaZPola(c){
   return (c && c.rate!=null) ? +c.rate : null;
 }
 
+/* Jeśli wizyta została przeniesiona — dokładamy nową w nowym terminie.
+   Wrzuca do tablicy; zapis do bazy robi wspólne saveVisits() niżej. */
+function dopiszPrzeniesiona(c, dur, typ){
+  if(formStatus!=='przeniesiona' || !formNowyTermin) return null;
+  const {date, time}=formNowyTermin;
+  if(visitsOn(date).some(v=>v.clientId===c.id && v.time===time)) return null;  /* już jest */
+  const nowa={id:uid(), clientId:c.id, date, time, dur, type:typ,
+              paid:false, paidOn:null, status:'', platna:null, zuzywa:null,
+              price:cenaZPola(c), seriesId:null};
+  visits.push(nowa);
+  return nowa;
+}
+
 async function saveVisit(){
   const c=currentClient();
   if(!c){
@@ -2281,9 +2796,12 @@ async function saveVisit(){
       if(s){ s.skips=(s.skips||[]).concat([stara.date]); await saveSeries(); }
       visits.push({id:uid(),clientId:c.id,date,time,dur,type:formType,paid:formPaid,
                    paidOn:formPaid?(formPaidOn||todayYmd()):null,
+                   status:formStatus, platna:formPlatna, zuzywa:formZuzywa, 
                    price:cenaZPola(c),seriesId:null,fromSeries:stara.seriesId});
+      const n1=dopiszPrzeniesiona(c, dur, formType);
       await saveVisits(); closeVisit(); render(); checkPkt();
-      toast('Zmieniono tylko tę wizytę — reszta serii bez zmian');
+      toast(n1 ? 'Przeniesiona na '+n1.date+' o '+n1.time
+               : 'Zmieniono tylko tę wizytę — reszta serii bez zmian');
       return;
     }
     if(visits.some(v=>v.id!==editId&&v.clientId===c.id&&v.date===date&&v.time===time)){
@@ -2291,8 +2809,11 @@ async function saveVisit(){
     }
     visits=visits.map(v=>v.id===editId?{...v,clientId:c.id,date,time,dur,type:formType,paid:formPaid,
       paidOn:formPaid?(v.paidOn||formPaidOn||todayYmd()):null,
+      status:formStatus, platna:formPlatna, zuzywa:formZuzywa, 
       price:cenaZPola(c)}:v);
-    await saveVisits(); closeVisit(); render(); checkPkt(); toast('Zapisano');
+    const n2=dopiszPrzeniesiona(c, dur, formType);
+    await saveVisits(); closeVisit(); render(); checkPkt();
+    toast(n2 ? 'Przeniesiona na '+n2.date+' o '+n2.time : 'Zapisano');
     return;
   }
 
@@ -2315,8 +2836,11 @@ async function saveVisit(){
   }
   visits.push({id:uid(),clientId:c.id,date,time,dur,type:formType,paid:formPaid,
                paidOn:formPaid?(formPaidOn||todayYmd()):null,
+               status:formStatus, platna:formPlatna, zuzywa:formZuzywa, 
                price:cenaZPola(c),seriesId:null});
-  await saveVisits(); closeVisit(); render(); checkPkt(); toast(c.name+' — dodana');
+  const n3=dopiszPrzeniesiona(c, dur, formType);
+  await saveVisits(); closeVisit(); render(); checkPkt();
+  toast(n3 ? 'Przeniesiona na '+n3.date+' o '+n3.time : c.name+' — dodana');
 }
 
 async function deleteVisit(){
