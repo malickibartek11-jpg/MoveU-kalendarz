@@ -339,6 +339,7 @@ i.g-odw{background:var(--red);}
 i.g-prz{background:#D9A86C;}
 i.g-kasa{background:#2F6FA8;}
 i.g-nowi{background:#4E8B5A;}
+i.g-wplyw{background:#7B8CA6;}
 .legenda{display:flex;gap:14px;flex-wrap:wrap;padding:2px 0 0;font-size:12px;color:var(--muted);}
 .legenda span{display:flex;align-items:center;gap:5px;}
 .legenda i{width:10px;height:10px;border-radius:3px;display:block;}
@@ -1415,7 +1416,7 @@ function rebuildPkt(){
         cnt++; inPkg++;
         const u = odwolanaLubPrzen(v) ? true : started(ds,v.time);
         if(u) used++;
-        map[ds+'|'+v.time]={n:inPkg,size:pkgs[idx].size||PKT_SIZE,used:u};
+        map[ds+'|'+v.time]={n:inPkg,size:pkgs[idx].size||PKT_SIZE,used:u,pkgId:pkgs[idx].id};
         lastDate=ds;
       }
       d=addDays(d,1);
@@ -1430,7 +1431,7 @@ function pktFor(v){
   if(!info) return null;
   if(info.brak) return {kind:'brak'};
   const hit=info.map[v.date+'|'+v.time];
-  if(hit) return {kind:hit.used?'used':'plan', n:hit.n, size:hit.size};
+  if(hit) return {kind:hit.used?'used':'plan', n:hit.n, size:hit.size, pkgId:hit.pkgId};
   if(info.pelny && v.date>=info.lastDate) return {kind:'over'};
   return null;
 }
@@ -1751,7 +1752,8 @@ function statMiesiaca(mc){
   });
   return {mc, odbyte, odwolane, przeniesione, plan, rodzaje,
           wszystkie:odbyte+odwolane+przeniesione,
-          przychod: wplywyMc(mc).reduce((a,x)=>a+x.ile,0),
+          przychod: zarobekMc(mc).reduce((a,x)=>a+x.ile,0),
+          wplywy:   wplywyMc(mc).reduce((a,x)=>a+x.ile,0),
           nowi: noweOsobyMc(mc).length};
 }
 
@@ -1848,7 +1850,7 @@ function renderStat(){
        (sumaPrz?' · '+sumaPrz+' przeniesionych':'')+'</div></div>'+
      '</div>';
   h+='<div class="kpi3">'+
-     '<div class="kpi"><div class="l">Wpłaty razem</div><div class="v">'+zl(sumaPrzych)+'</div>'+
+     '<div class="kpi"><div class="l">Zarobione razem</div><div class="v">'+zl(sumaPrzych)+'</div>'+
        '<div class="s">'+statZakres+' mies.</div></div>'+
      '<div class="kpi"><div class="l">'+MONTHS[new Date().getMonth()]+'</div>'+
        '<div class="v">'+zl(biez.przychod)+'</div>'+
@@ -1870,12 +1872,21 @@ function renderStat(){
                {kl:'g-prz',n:'przeniesione',v:d.przeniesione}]})))+
      '</div>';
 
-  /* ---- PRZYCHÓD ---- */
-  h+='<div class="sek"><div class="sek-t">Wpłaty w miesiącach</div>'+
+  /* ---- ZAROBIONE (po dacie wizyty) ---- */
+  const kwotaPokaz = v => !v ? '' : (v>=10000 ? Math.round(v/1000)+'k' : Math.round(v));
+  h+='<div class="sek"><div class="sek-t">Zarobione w miesiącach</div>'+
      slupki(dane.map(d=>({etykieta:mcNazwaKrotka(d.mc), v:d.przychod,
-       pokaz: !d.przychod ? '' :
-         (d.przychod>=10000 ? Math.round(d.przychod/1000)+'k' : d.przychod)})), {kl:'g-kasa'})+
-     '<div class="sek-info">Liczy się <b>data wpłaty</b>, nie data wizyty.</div>'+
+       pokaz:kwotaPokaz(d.przychod)})), {kl:'g-kasa'})+
+     '<div class="sek-info">Wizyta liczy się w miesiącu, w którym się <b>odbyła</b> '+
+     '— o ile jest opłacona. Pakiet rozkłada się na swoje wejścia.</div>'+
+     '</div>';
+
+  /* ---- WPŁYNĘŁO (po dacie wpłaty) ---- */
+  h+='<div class="sek"><div class="sek-t">Wpłynęło do kasy</div>'+
+     slupki(dane.map(d=>({etykieta:mcNazwaKrotka(d.mc), v:d.wplywy,
+       pokaz:kwotaPokaz(d.wplywy)})), {kl:'g-wplyw'})+
+     '<div class="sek-info">Po <b>dacie wpłaty</b>. Pakiet opłacony z góry wpada tu '+
+     'w całości w miesiącu wpłaty.</div>'+
      '</div>';
 
   /* ---- NOWE OSOBY ---- */
@@ -2156,6 +2167,41 @@ function dlugKlienta(cid){
 }
 
 /* wpłaty w danym miesiącu — to jest przychód */
+/* ============================================================
+   PRZYCHÓD — liczony MEMORIAŁOWO, czyli do miesiąca WIZYTY.
+   Wizyta wchodzi do przychodu dopiero wtedy, gdy jest opłacona:
+   – pojedyncza        → gdy ma ptaszka „Rozliczona"
+   – wizyta z pakietu  → gdy pakiet ma wpisaną datę wpłaty
+   Pakiet to tylko informacja „wpłacone z góry, zostało X wejść";
+   jego kwota rozkłada się równo na wszystkie wejścia.
+   ============================================================ */
+function wartoscWizyty(v){
+  const p=pktFor(v);
+  if(p && (p.kind==='used' || p.kind==='plan')){
+    const pk=packages.find(x=>x.id===p.pkgId);
+    if(!pk) return {kwota:0, oplacona:false, zPakietu:true};
+    const size=pk.size||PKT_SIZE;
+    const kwota=(pk.amount!=null && size) ? (+pk.amount)/size : cenaWizyty(v);
+    return {kwota, oplacona:!!pk.paidOn, zPakietu:true};
+  }
+  /* poza pakietem albo klient rozliczany za wizytę / miesięcznie */
+  return {kwota:cenaWizyty(v), oplacona:!!v.paid, zPakietu:false};
+}
+
+/* zarobek przypisany do miesiąca, w którym odbyły się wizyty */
+function zarobekMc(mc){
+  const grupy={};
+  wizytyMiesiaca(mc).forEach(v=>{
+    if(!odbyta(v)) return;                 /* nieodbyta albo odwołana bez opłaty */
+    const w=wartoscWizyty(v);
+    if(!w.oplacona || !w.kwota) return;    /* jeszcze nie zapłacone */
+    const g=grupy[v.clientId] || (grupy[v.clientId]={cid:v.clientId, ile:0, n:0, pakiet:false});
+    g.ile+=w.kwota; g.n++; if(w.zPakietu) g.pakiet=true;
+  });
+  return Object.values(grupy).sort((a,b)=>b.ile-a.ile);
+}
+
+/* ile kasy fizycznie wpłynęło w danym miesiącu (po dacie wpłaty) */
 function wplywyMc(mc){
   const z=[];
   packages.forEach(x=>{
@@ -2262,6 +2308,8 @@ function renderPlatnosci(){
   document.getElementById('plat-okres').textContent=
     MONTHS[mcCursor.getMonth()]+' '+mcCursor.getFullYear();
 
+  const zar=zarobekMc(mc);
+  const zarobek=zar.reduce((s,x)=>s+x.ile,0);
   const wpl=wplywyMc(mc);
   const przychod=wpl.reduce((s,x)=>s+x.ile,0);
 
@@ -2280,8 +2328,9 @@ function renderPlatnosci(){
   const doOdebrania=dluznicy.reduce((s,x)=>s+x.d.kwota,0);
 
   let h='<div class="kpi3">'+
-    '<div class="kpi"><div class="l">Wpłynęło w '+MONTHS[mcCursor.getMonth()]+'</div>'+
-      '<div class="v">'+zl(przychod)+'</div><div class="s">'+wpl.length+' wpłat</div></div>'+
+    '<div class="kpi"><div class="l">Zarobione w '+MONTHS[mcCursor.getMonth()]+'</div>'+
+      '<div class="v">'+zl(zarobek)+'</div>'+
+      '<div class="s">'+zar.reduce((a,x)=>a+x.n,0)+' opłaconych wizyt</div></div>'+
     '<div class="kpi'+(doOdebrania>0?' zle':'')+'"><div class="l">Do odebrania</div>'+
       '<div class="v">'+zl(doOdebrania)+'</div><div class="s">'+dluznicy.length+' osób</div></div>'+
     '</div>';
@@ -2328,8 +2377,25 @@ function renderPlatnosci(){
   }
   h+='</div>';
 
-  /* ---- WPŁYWY ---- */
-  h+='<div class="sek"><div class="sek-t">Wpłynęło — '+MONTHS[mcCursor.getMonth()]+' '+mcCursor.getFullYear()+'</div>';
+  /* ---- ZAROBEK MIESIĄCA (po dacie wizyty) ---- */
+  h+='<div class="sek"><div class="sek-t">Zarobione — '+MONTHS[mcCursor.getMonth()]+' '+mcCursor.getFullYear()+'</div>';
+  if(!zar.length){
+    h+='<div class="sek-pusto">Brak opłaconych wizyt w tym miesiącu</div>';
+  } else {
+    zar.forEach(x=>{
+      h+='<div class="wp"><div class="wp-n">'+esc(clientName(x.cid))+
+         '<div class="wp-s">'+x.n+' wizyt'+(x.n===1?'a':'')+(x.pakiet?' · z pakietu':'')+'</div></div>'+
+         '<div class="wp-k">'+zl(x.ile)+'</div></div>';
+    });
+    h+='<div class="wp suma"><div class="wp-n"><b>Razem</b></div>'+
+       '<div class="wp-k"><b>'+zl(zarobek)+'</b></div></div>';
+  }
+  h+='<div class="sek-info" style="padding:9px 0 0;">Wizyta wchodzi tu w miesiącu, '+
+     'w którym się <b>odbyła</b> — ale dopiero gdy jest opłacona.</div>';
+  h+='</div>';
+
+  /* ---- WPŁYWY (kasa fizycznie) ---- */
+  h+='<div class="sek"><div class="sek-t">Wpłynęło do kasy — '+MONTHS[mcCursor.getMonth()]+' '+mcCursor.getFullYear()+'</div>';
   if(!wpl.length){
     h+='<div class="sek-pusto">Brak wpłat w tym miesiącu</div>';
   } else {
@@ -2342,6 +2408,8 @@ function renderPlatnosci(){
     h+='<div class="wp suma"><div class="wp-n"><b>Razem</b></div><div class="wp-d"></div>'+
        '<div class="wp-k"><b>'+zl(przychod)+'</b></div></div>';
   }
+  h+='<div class="sek-info" style="padding:9px 0 0;">Po <b>dacie wpłaty</b>. '+
+     'Pakiet opłacony z góry wpada tu w całości, a w „Zarobione" rozkłada się na wizyty.</div>';
   h+='</div>';
 
   h+='<div class="sek-info">Liczę od <b>'+START_ROZLICZEN+'</b>. '+
