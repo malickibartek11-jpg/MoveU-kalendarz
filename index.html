@@ -817,7 +817,7 @@ i.g-wplyw{background:#7B8CA6;}
 </div>
 
 <!-- ===== PAKIET WYCZERPANY ===== -->
-<div class="ov" id="ov-pkt">
+<div class="ov" id="ov-pkt" onclick="if(event.target===this)zamknijPkt()">
   <div class="modal">
     <h3>Pakiet wykorzystany</h3>
     <div id="pk-body"></div>
@@ -1279,6 +1279,18 @@ function podobni(nazwa){
 /* gdy okno jest otwarte, tło nie może się przewijać — na telefonie
    gubiło to miejsce, w którym byłeś */
 let scrollPrzed=0;
+/* Samonaprawa: jeśli żadne okienko nie jest otwarte, a strona nadal
+   jest zablokowana, zdejmujemy blokadę. Wołane z render() i setSekcja(),
+   więc zacięcie przewijania nie ma jak przeżyć. */
+function odblokujJesliTrzeba(){
+  const otwarte = document.querySelectorAll('.ov.on').length>0;
+  if(!otwarte && document.body.style.position==='fixed'){
+    document.body.style.position=''; document.body.style.top='';
+    document.body.style.left=''; document.body.style.right='';
+    window.scrollTo(0, scrollPrzed||0);
+  }
+}
+
 function odswiezBlokade(){
   const otwarte = document.querySelectorAll('.ov.on').length>0;
   const zablokowane = document.body.style.position==='fixed';
@@ -1464,6 +1476,7 @@ function render(){
   }catch(e){ console.error(e);
     document.getElementById('board').innerHTML='<div class="empty">Błąd rysowania — zobacz konsolę.</div>'; }
   try{ pokazDzisiaj(); }catch(e){ console.error(e); }
+  try{ odblokujJesliTrzeba(); }catch(e){}
 }
 
 /* Przewijamy TYLKO przy zmianie dnia/widoku — nie po każdym zapisie.
@@ -2453,6 +2466,7 @@ function renderKlienci(){
 let sekcja='kal';
 function setSekcja(k){
   sekcja=k;
+  odblokujJesliTrzeba();
   ['kal','plat','kli','stat'].forEach(x=>{
     document.getElementById('page-'+x).style.display = (x===k)?'block':'none';
     document.getElementById('s-'+x).classList.toggle('on', x===k);
@@ -3202,12 +3216,30 @@ async function delPackage(id){
   await savePackages(); renderClientCard(); render(); toast('Pakiet usunięty');
 }
 
-/* ---------- okienko: pakiet wykorzystany ---------- */
+/* ---------- okienko: pakiet wykorzystany ----------
+   Pokazujemy JEDEN raz na wyczerpany pakiet. Potwierdzenie trzymamy
+   w pamięci przeglądarki — wcześniej siedziało tylko w pamięci karty
+   i wracało przy każdym logowaniu.                                   */
+function pktAckGet(cid){
+  try{ return parseInt(localStorage.getItem('moveu-pkt-ack-'+cid),10) || 0; }
+  catch(e){ return 0; }
+}
+function pktAckSet(cid, cap){
+  try{ localStorage.setItem('moveu-pkt-ack-'+cid, String(cap||0)); }catch(e){}
+}
+/* zamyka okienko i odhacza, żeby nie wracało */
+function zamknijPkt(){
+  const c=clientById(pktClientId);
+  if(c) pktAckSet(c.id, (PKT[c.id]||{}).cap);
+  document.getElementById('ov-pkt').classList.remove('on');
+  odswiezBlokade();
+}
+
 function checkPkt(){
   rebuildPkt();
   const kand=clients.filter(c=>(c.billing||'')==='pakiet').find(c=>{
     const i=PKT[c.id];
-    return i && !i.brak && i.cap>0 && i.used>=i.cap && c.pktAck!==i.cap;
+    return i && !i.brak && i.cap>0 && i.used>=i.cap && pktAckGet(c.id)!==i.cap;
   });
   if(!kand) return;
   pktClientId=kand.id;
@@ -3220,14 +3252,12 @@ function checkPkt(){
 async function pktAdd(){
   const c=clientById(pktClientId);
   if(!c) return;
-  document.getElementById('ov-pkt').classList.remove('on');
+  zamknijPkt();
   cardClientId=c.id;
   await addPackage();
 }
-async function pktLater(){
-  const c=clientById(pktClientId);
-  if(c){ c.pktAck=(PKT[c.id]||{}).cap; await saveClients(); }
-  document.getElementById('ov-pkt').classList.remove('on');
+function pktLater(){
+  zamknijPkt();
   render();
 }
 
@@ -3326,7 +3356,8 @@ function startKalendarz(){
   /* gest przesuwania palcem usunięty — łapał zwykłe przewijanie */
 
   document.addEventListener('keydown',e=>{
-    if(e.key==='Escape'){ closeVisit(); closeDay(); closeClient(); closeImport(); }
+    if(e.key==='Escape'){ closeVisit(); closeDay(); closeClient(); closeImport();
+                          if(document.getElementById('ov-pkt').classList.contains('on')) zamknijPkt(); }
     if((e.ctrlKey||e.metaKey) && (e.key==='+'||e.key==='=')){ e.preventDefault(); zoomBy(1); }
     if((e.ctrlKey||e.metaKey) && e.key==='-'){ e.preventDefault(); zoomBy(-1); }
   });
@@ -3339,7 +3370,7 @@ function startKalendarz(){
   setView(view);
   let sek=null;
   try{ sek=localStorage.getItem('moveu-cal-sekcja'); }catch(e){}
-  setSekcja(['kal','plat','kli'].includes(sek)?sek:'kal');
+  setSekcja(['kal','plat','kli','stat'].includes(sek)?sek:'kal');
   setTimeout(checkPkt,600);
   setTimeout(sprawdzKopie,900);
 }
